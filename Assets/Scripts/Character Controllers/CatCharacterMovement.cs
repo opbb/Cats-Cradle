@@ -6,7 +6,8 @@ public class CatCharacterMovement : MonoBehaviour
 {
 
     [SerializeField] private Transform trans;
-    [SerializeField] private CatCharacterControler controler;
+    [SerializeField] private CatCharacterController controller;
+    [SerializeField] private DialogueController dialogueController;
 
     //Tuning Variables
     [SerializeField] private float speed = 0f;
@@ -40,7 +41,7 @@ public class CatCharacterMovement : MonoBehaviour
 
         // These 2 variables get the player's clicks
         leftMouse = Input.GetButton("Fire1");
-        rightMouse = Input.GetButton("Fire2");
+        rightMouse = Input.GetButtonDown("Fire2");
 
         //These variables get the player's other inputs
         spaceDown = Input.GetButton("Jump");
@@ -58,12 +59,21 @@ public class CatCharacterMovement : MonoBehaviour
 
         //--------------------------------------------------------------------------------------------
 
+
+        //TESTING:
+        //--------------------------------------------------------------------------------------------
+
+        if (rightMouse) {
+            dialogueController.Speak("This is a test phrase.");
+        }
+
+        //--------------------------------------------------------------------------------------------
     }
 
     // FixedUpdate is called independently of frames, and so is used for physics calculations.
     void FixedUpdate()
     {
-        controler.Move(horizontalMove * Time.fixedDeltaTime, shiftDown, spaceDown);
+        controller.Move(horizontalMove * Time.fixedDeltaTime, shiftDown, spaceDown);
     }
 
     // LateUpdate is called once per frame after every Update() method.
