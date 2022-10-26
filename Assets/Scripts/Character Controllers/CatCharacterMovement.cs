@@ -8,6 +8,7 @@ public class CatCharacterMovement : MonoBehaviour
     [SerializeField] private Transform trans;
     [SerializeField] private CatCharacterController controller;
     [SerializeField] private DialogueController dialogueController;
+    [SerializeField] private Animator animator;
 
     //Tuning Variables
     [SerializeField] private float speed = 0f;
@@ -30,6 +31,23 @@ public class CatCharacterMovement : MonoBehaviour
 
     // Update is called once per frame.
     void Update()
+    {
+
+
+
+
+        //TESTING:
+        //--------------------------------------------------------------------------------------------
+
+        if (rightMouse) {
+            dialogueController.Speak("This is a test phrase.");
+        }
+
+        //--------------------------------------------------------------------------------------------
+    }
+
+    // FixedUpdate is called independently of frames, and so is used for physics calculations.
+    void FixedUpdate()
     {
 
         //INPUTS:
@@ -55,25 +73,13 @@ public class CatCharacterMovement : MonoBehaviour
 
         //if (shiftDown) { speed = normSpeed * speedFactor; } else { speed = normSpeed; }
 
+        animator.SetFloat("speed", Mathf.Abs(horizontal));
         horizontalMove = horizontal * speed;
 
         //--------------------------------------------------------------------------------------------
 
 
-        //TESTING:
-        //--------------------------------------------------------------------------------------------
-
-        if (rightMouse) {
-            dialogueController.Speak("This is a test phrase.");
-        }
-
-        //--------------------------------------------------------------------------------------------
-    }
-
-    // FixedUpdate is called independently of frames, and so is used for physics calculations.
-    void FixedUpdate()
-    {
-        controller.Move(horizontalMove * Time.fixedDeltaTime, shiftDown, spaceDown);
+        controller.Move(horizontalMove * Time.fixedDeltaTime, spaceDown);
     }
 
     // LateUpdate is called once per frame after every Update() method.

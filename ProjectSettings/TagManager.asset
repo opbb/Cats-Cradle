@@ -8,11 +8,11 @@ TagManager:
   - Default
   - TransparentFX
   - Ignore Raycast
-  - Player
+  - Cat
   - Water
   - UI
   - Ground
-  - 
+  - Skeleton
   - 
   - 
   - 
@@ -40,6 +40,9 @@ TagManager:
   m_SortingLayers:
   - name: Default
     uniqueID: 0
+    locked: 0
+  - name: Player
+    uniqueID: 163379317
     locked: 0
   - name: Dialogue
     uniqueID: 1257684653
