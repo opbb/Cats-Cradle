@@ -9,13 +9,16 @@ public class CatCharacterMovement : MonoBehaviour
     [SerializeField] private CatCharacterController controller;
     [SerializeField] private DialogueController dialogueController;
     [SerializeField] private Animator animator;
+    [SerializeField] private new Camera camera;
 
     //Tuning Variables
     [SerializeField] private float speed = 0f;
+    [SerializeField] private float maxJump;
 
     private float horizontal = 0f;
     private float vertical = 0f;
     private bool leftMouse = false;
+    private bool leftMouseWasDown = false;
     private bool rightMouse = false;
     private bool spaceDown = false;
     private bool shiftDown = false;
@@ -59,6 +62,7 @@ public class CatCharacterMovement : MonoBehaviour
 
         // These 2 variables get the player's clicks
         leftMouse = Input.GetButton("Fire1");
+
         rightMouse = Input.GetButtonDown("Fire2");
 
         //These variables get the player's other inputs
@@ -76,10 +80,32 @@ public class CatCharacterMovement : MonoBehaviour
         animator.SetFloat("speed", Mathf.Abs(horizontal));
         horizontalMove = horizontal * speed;
 
+        controller.Move(horizontalMove * Time.fixedDeltaTime, spaceDown);
+        
+        if (controller.Grounded() && (leftMouse || leftMouseWasDown)) {
+            //Find difference between mouse position (in worldspace) and cat position
+            Vector3 mousePos = camera.ScreenToWorldPoint(Input.mousePosition);
+            Vector3 catToMouse = mousePos - transform.position;
+        
+            // Limit jump strength
+            catToMouse = Vector3.ClampMagnitude(catToMouse, maxJump);
+            
+            // Face towards mouse
+            controller.FaceDirection(catToMouse);
+            
+            if (!leftMouse) {
+                // zero velocity then add old velocity to this then clamp to make run jumping less effective?
+                //Vector3 newVelocity = catToMouse + Rigidbody2D.velocity
+
+                // Jump
+                controller.Jump(catToMouse, catToMouse.magnitude);
+            }
+        }
+
         //--------------------------------------------------------------------------------------------
 
-
-        controller.Move(horizontalMove * Time.fixedDeltaTime, spaceDown);
+        // Final Variable Updates
+        leftMouseWasDown = leftMouse;
     }
 
     // LateUpdate is called once per frame after every Update() method.

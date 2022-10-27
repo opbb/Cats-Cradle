@@ -7,11 +7,12 @@ public class CatCharacterController : MonoBehaviour
 {
 	[SerializeField] private float m_JumpForce = 400f;                          // Amount of force added when the player jumps.
 	[Range(0, .3f)] [SerializeField] private float m_MovementSmoothing = .05f;  // How much to smooth out the movement
-	[SerializeField] private bool m_AirControl = false;                         // Whether or not a player can steer while jumping;
 	[SerializeField] private LayerMask m_WhatIsGround;                          // A mask determining what is ground to the character
 	[SerializeField] private Transform m_GroundCheckLeft;                       // A position marking where to check if the player is grounded.
 	[SerializeField] private Transform m_GroundCheckRight;                       // A position marking where to check if the player is grounded.
 	[SerializeField] private Animator m_animator; 								// The animator for this character
+	[SerializeField] private float maxAngle; 								    // The maximum angle at which this character can rotate.
+
 
 	const float k_GroundedRadius = .2f; // Radius of the overlap circle to determine if grounded
 	private bool m_Grounded;            // Whether or not the player is grounded.
@@ -52,7 +53,42 @@ public class CatCharacterController : MonoBehaviour
 					OnLandEvent.Invoke();
 			}
 		}
- 
+ /*
+		if(m_Grounded) {
+			transform.rotation.Set(0f,0f,0f,0f);
+		} else {
+			Vector2 velocity = m_Rigidbody2D.velocity;
+			if(velocity.x < 0f) {
+				// Make sure it's facing the right direction.
+				if (m_FacingRight) {
+					Flip();
+				}
+
+			
+			} else if (velocity.x > 0f) {
+				// Make sure it's facing the right direction.
+				if (!m_FacingRight) {
+					Flip();
+				}
+
+
+			}
+
+			if(velocity.x != 0f) {
+				Quaternion rotation = Quaternion.LookRotation(Vector3.forward, velocity);
+				Vector3 angles = rotation.eulerAngles;
+				Debug.Log(angles);
+				
+				if (angles.z > maxAngle) {
+					rotation.eulerAngles = new Vector3(0f,0f,maxAngle);
+				} else if (angles.z < -maxAngle) {
+					rotation.eulerAngles = new Vector3(0f,0f,-maxAngle);
+				}
+
+				transform.rotation = rotation;
+			}
+		}
+		*/
 
 		m_animator.SetBool("grounded", m_Grounded);
 	}
@@ -61,10 +97,9 @@ public class CatCharacterController : MonoBehaviour
 	public void Move(float move, bool jump)
 	{
 
-		//only control the player if grounded or airControl is turned on
-		if (m_Grounded || m_AirControl)
+		//only control the player if grounded
+		if (m_Grounded)
 		{
-
 			// Move the character by finding the target velocity
 			Vector3 targetVelocity = new Vector2(move * 10f, m_Rigidbody2D.velocity.y);
 			// And then smoothing it out and applying it to the character
@@ -92,6 +127,11 @@ public class CatCharacterController : MonoBehaviour
 		}
 	}
 
+	public void Jump(Vector2 jumpDirection, float jumpForce) {
+		jumpDirection = jumpDirection.normalized;
+		m_Rigidbody2D.AddForce(jumpDirection * (jumpForce * m_JumpForce));
+	}
+
 
 	private void Flip()
 	{
@@ -102,5 +142,17 @@ public class CatCharacterController : MonoBehaviour
 		Vector3 theScale = transform.localScale;
 		theScale.x *= -1;
 		transform.localScale = theScale;
+	}
+
+	// Face (only in the X axis) towards the given vector
+	public void FaceDirection(Vector3 direction) {
+		if((direction.x > 0 && !m_FacingRight) || (direction.x < 0 && m_FacingRight)) {
+			Flip();
+		}
+	}
+
+	// Get m_Grounded variable
+	public bool Grounded() {
+		return m_Grounded;
 	}
 }
