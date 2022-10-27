@@ -10,6 +10,7 @@ public class CatCharacterMovement : MonoBehaviour
     [SerializeField] private DialogueController dialogueController;
     [SerializeField] private Animator animator;
     [SerializeField] private new Camera camera;
+    [SerializeField] FMODUnity.StudioEventEmitter footsteps;
 
     //Tuning Variables
     [SerializeField] private float speed = 0f;
@@ -77,7 +78,15 @@ public class CatCharacterMovement : MonoBehaviour
 
         //if (shiftDown) { speed = normSpeed * speedFactor; } else { speed = normSpeed; }
 
-        animator.SetFloat("speed", Mathf.Abs(horizontal));
+        // TODO: MAke an audio manager, this system is messy
+        float speedParam = Mathf.Abs(horizontal);
+        animator.SetFloat("speed", speedParam);
+        if(speedParam > 0 && !footsteps.IsPlaying()) {
+            footsteps.Play();
+        } else if (speedParam < .01f && footsteps.IsPlaying()) {
+            footsteps.Stop();
+        }
+        
         horizontalMove = horizontal * speed;
 
         controller.Move(horizontalMove * Time.fixedDeltaTime, spaceDown);
