@@ -94,7 +94,7 @@ public class CatCharacterController : MonoBehaviour
 	}
 
 
-	public void Move(float move, bool jump)
+	public void Move(float move)
 	{
 
 		//only control the player if grounded
@@ -117,13 +117,6 @@ public class CatCharacterController : MonoBehaviour
 				// ... flip the player.
 				Flip();
 			}
-		}
-		// If the player should jump...
-		if (m_Grounded && jump)
-		{
-			// Add a vertical force to the player.
-			m_Grounded = false;
-			m_Rigidbody2D.AddForce(new Vector2(0f, m_JumpForce));
 		}
 	}
 

@@ -7,7 +7,7 @@ public class CatCharacterMovement : MonoBehaviour
 
     [SerializeField] private Transform trans;
     [SerializeField] private CatCharacterController controller;
-    [SerializeField] private DialogueController dialogueController;
+    [SerializeField] private DialogueManager dialogueManager;
     [SerializeField] private Animator animator;
     [SerializeField] private new Camera camera;
     [SerializeField] FMODUnity.StudioEventEmitter footsteps;
@@ -44,7 +44,7 @@ public class CatCharacterMovement : MonoBehaviour
         //--------------------------------------------------------------------------------------------
 
         if (rightMouse) {
-            dialogueController.Speak("This is a test phrase.");
+            dialogueManager.triggerDialogue(3);
         }
 
         //--------------------------------------------------------------------------------------------
@@ -89,7 +89,7 @@ public class CatCharacterMovement : MonoBehaviour
         
         horizontalMove = horizontal * speed;
 
-        controller.Move(horizontalMove * Time.fixedDeltaTime, spaceDown);
+        controller.Move(horizontalMove * Time.fixedDeltaTime);
         
         if (controller.Grounded() && (leftMouse || leftMouseWasDown)) {
             //Find difference between mouse position (in worldspace) and cat position
