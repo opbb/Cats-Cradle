@@ -11,7 +11,8 @@ public class CatCharacterController : MonoBehaviour
 	[SerializeField] private Transform m_GroundCheckLeft;                       // A position marking where to check if the player is grounded.
 	[SerializeField] private Transform m_GroundCheckRight;                       // A position marking where to check if the player is grounded.
 	[SerializeField] private Animator m_animator; 								// The animator for this character
-	[SerializeField] private float maxAngle; 								    // The maximum angle at which this character can rotate.
+	[SerializeField] private float jumpVelocityTransfer; 						// The amount of prior velocity that remains when jumping.
+	//[SerializeField] private float maxAngle; 								    // The maximum angle at which this character can rotate.
 
 
 	const float k_GroundedRadius = .2f; // Radius of the overlap circle to determine if grounded
@@ -122,6 +123,7 @@ public class CatCharacterController : MonoBehaviour
 
 	public void Jump(Vector2 jumpDirection, float jumpForce) {
 		jumpDirection = jumpDirection.normalized;
+		m_Rigidbody2D.velocity = m_Rigidbody2D.velocity * jumpVelocityTransfer;
 		m_Rigidbody2D.AddForce(jumpDirection * (jumpForce * m_JumpForce));
 	}
 

@@ -40,7 +40,8 @@ public class CameraController : MonoBehaviour
         transform.position = thisPos;
         listener.position = activePos;
     }
-public void switchActive() {
+    
+    public void switchActive() {
         catActive = !catActive;
     }
     

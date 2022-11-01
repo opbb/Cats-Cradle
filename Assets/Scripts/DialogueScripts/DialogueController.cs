@@ -10,6 +10,7 @@ public class DialogueController : MonoBehaviour
     [SerializeField] private Transform speakerTransform;
     [SerializeField] private TextMeshPro text;
     [SerializeField] private SpriteRenderer speechBubble;
+    [SerializeField] private new Camera camera;
     [SerializeField] private float vertOffset;
     [SerializeField] private float horiOffset;
 
@@ -20,9 +21,7 @@ public class DialogueController : MonoBehaviour
     void Start()
     {
         // Set Postion and Rotation relative to speaker
-        Vector3 parentPos = speakerTransform.position;
-        Vector3 thisPos = new Vector3(parentPos.x + horiOffset, parentPos.y + vertOffset, 0f);
-        transform.position = thisPos;
+        setPosition();
         transform.rotation.Set(0f,0f,0f,0f);
 
         //Set up dialogueLine data
@@ -35,9 +34,7 @@ public class DialogueController : MonoBehaviour
     void Update()
     {
         // Set Postion relative to speaker
-        Vector3 parentPos = speakerTransform.position;
-        Vector3 thisPos = new Vector3(parentPos.x + horiOffset, parentPos.y + vertOffset, 0f);
-        transform.position = thisPos;
+        setPosition();
 
         // Speak the current text, and hold it for a little after.
         if(!speaking && lineQueue.Count > 0) {
@@ -58,6 +55,7 @@ public class DialogueController : MonoBehaviour
         while(lineQueue.Count > 0) {
             Dialogue.DialogueLine dialogueLine = lineQueue.Dequeue();
             
+            Debug.Log("Speaking");
             text.text = dialogueLine.text;
 
             /*
@@ -86,4 +84,29 @@ public class DialogueController : MonoBehaviour
         text.color = Color.clear;
     }
 
+    private void setPosition() {
+        Vector3 targetPos = speakerTransform.position;
+        targetPos = targetPos + new Vector3(horiOffset,vertOffset, 0f);
+        targetPos = camera.WorldToScreenPoint(targetPos);
+
+        // Get's the components of where the bubble wants to be in screen space
+        Vector3 targetPosX = new Vector3(targetPos.x, 0f, 0f);
+        Vector3 targetPosY = new Vector3(0f, targetPos.y, 0f);
+
+
+
+        // Clamps the magnitude of the components so that the bubble is on the screen
+        Vector3 bubbleSize = camera.WorldToScreenPoint(camera.ScreenToWorldPoint(new Vector3(0f, 0f, 0f)) + speechBubble.bounds.size);
+        float xMax = (Screen.width - bubbleSize.x) / 2;
+        float yMax = (Screen.height - bubbleSize.y) / 2;
+
+        Vector3 xCenter = new Vector3(Screen.width / 2, 0f, 0f);
+        Vector3 yCenter = new Vector3(0f, Screen.height / 2, 0f);
+        targetPosX = Vector3.MoveTowards(xCenter, targetPosX, xMax);
+        targetPosY = Vector3.MoveTowards(yCenter, targetPosY, yMax);
+
+        // Construct new position
+        targetPos = camera.ScreenToWorldPoint(targetPosX + targetPosY);
+        transform.position = new Vector3(targetPos.x, targetPos.y, 0f);
+    }
 }

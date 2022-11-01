@@ -8,11 +8,11 @@ public class CatCharacterMovement : MonoBehaviour
     [SerializeField] private DialogueManager dialogueManager;
     [SerializeField] private Animator animator;
     [SerializeField] private new Camera camera;
-    [SerializeField] FMODUnity.StudioEventEmitter footsteps;
+    [SerializeField] FMODUnity.StudioEventEmitter footstepsEmitter;
 
     //Tuning Variables
     [SerializeField] private float speed = 0f;
-    [SerializeField] private float maxJump;
+    [SerializeField] private float maxJumpDist;
 
     [HideInInspector] public bool isActive = true;
     private float horizontal = 0f;
@@ -22,8 +22,6 @@ public class CatCharacterMovement : MonoBehaviour
     private bool rightMouse = false;
     private bool shiftDown = false;
     private float horizontalMove = 0f;
-
-    public 
 
     // Start is called before the first frame update.
     void Start()
@@ -67,56 +65,66 @@ public class CatCharacterMovement : MonoBehaviour
             
             shiftDown = Input.GetButton("Fire3");
 
-            //--------------------------------------------------------------------------------------------
-
-
-            //MOVEMENT:
-            //--------------------------------------------------------------------------------------------
-
-            //if (shiftDown) { speed = normSpeed * speedFactor; } else { speed = normSpeed; }
-
-            // TODO: MAke an audio manager, this system is messy
-            float speedParam = Mathf.Abs(horizontal);
-            animator.SetFloat("speed", speedParam);
-            if(speedParam > 0 && !footsteps.IsPlaying()) {
-                footsteps.Play();
-            } else if (speedParam < .01f && footsteps.IsPlaying()) {
-                footsteps.Stop();
-            }
-            
-            horizontalMove = horizontal * speed;
-
-            controller.Move(horizontalMove * Time.fixedDeltaTime);
-            
-            if (controller.Grounded() && (leftMouse || leftMouseWasDown)) {
-                //Find difference between mouse position (in worldspace) and cat position
-                Vector3 mousePos = camera.ScreenToWorldPoint(Input.mousePosition);
-                Vector3 catToMouse = mousePos - transform.position;
-            
-                // Limit jump strength
-                catToMouse = Vector3.ClampMagnitude(catToMouse, maxJump);
-                
-                // Face towards mouse
-                controller.FaceDirection(catToMouse);
-                
-                if (!leftMouse) {
-                    // zero velocity then add old velocity to this then clamp to make run jumping less effective?
-                    //Vector3 newVelocity = catToMouse + Rigidbody2D.velocity
-
-                    // Jump
-                    controller.Jump(catToMouse, catToMouse.magnitude);
-                }
-            }
-
-            //--------------------------------------------------------------------------------------------
-
-            // Final Variable Updates
-            leftMouseWasDown = leftMouse;
         }
+
+        //--------------------------------------------------------------------------------------------
+        //AUDIO & ANIMATION:
+        //--------------------------------------------------------------------------------------------
+
+        float speedParam = Mathf.Abs(horizontal);
+        animator.SetFloat("speed", speedParam);
+        if(speedParam > 0 && !footstepsEmitter.IsPlaying()) {
+            footstepsEmitter.Play();
+        } else if (speedParam < .01f && footstepsEmitter.IsPlaying()) {
+            footstepsEmitter.Stop();
+        }
+
+
+        //--------------------------------------------------------------------------------------------
+        //MOVEMENT:
+        //--------------------------------------------------------------------------------------------
+        
+        horizontalMove = horizontal * speed;
+
+        controller.Move(horizontalMove * Time.fixedDeltaTime);
+        
+        if (controller.Grounded() && (leftMouse || leftMouseWasDown)) {
+            //Find difference between mouse position (in worldspace) and cat position
+            Vector3 mousePos = Input.mousePosition;
+            Vector3 catPos = camera.WorldToScreenPoint(transform.position);
+            Vector3 catToMouse = mousePos - catPos;
+            float arbitraryValue = 100f;
+            catToMouse.x = catToMouse.x / Screen.width * arbitraryValue;
+            catToMouse.y = catToMouse.y / Screen.height * arbitraryValue;
+            catToMouse.z = 0f;
+            // Limit jump strength
+            Debug.Log("Before: " + catToMouse);
+            catToMouse = Vector3.ClampMagnitude(catToMouse, maxJumpDist);
+            Debug.Log("After: " + catToMouse);
+            
+            // Face towards mouse
+            controller.FaceDirection(catToMouse);
+            
+            if (!leftMouse) {
+                // Jump
+                controller.Jump(catToMouse, catToMouse.magnitude);
+            }
+        }
+
+        //--------------------------------------------------------------------------------------------
+
+        // Final Variable Updates
+        leftMouseWasDown = leftMouse;
     }
 
     public void switchActive() {
         isActive = !isActive;
+        horizontal = 0f;
+        vertical = 0f;
+        leftMouse = false;
+        rightMouse = false;
+        shiftDown = false;
+        leftMouseWasDown = false;
     }
 
     // LateUpdate is called once per frame after every Update() method.
