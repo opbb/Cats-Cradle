@@ -32,4 +32,12 @@ private float horizontal = 0f;
         isActive = !isActive;
         horizontal = 0f;
     }
+
+    public bool getIsActive() {
+        return isActive;
+    }
+
+    public LayerMask getGrabbable() {
+        return -1;
+    }
 }

@@ -7,6 +7,10 @@ using UnityEngine;
     interface SkeletonController
     {
         void switchActive();
+
+        bool getIsActive();
+
+        LayerMask getGrabbable();
     }
 
 //}
