@@ -39,7 +39,7 @@ public class SkeletonGrab : MonoBehaviour
         }
     }
 
-    private void OnTriggerEnter2D(Collider2D col)
+    private void OnCollisionEnter2D(Collision2D col)
     {
         Debug.Log("In On Trigger Enter");
         int layer = col.gameObject.layer; // The layer this collision is with.

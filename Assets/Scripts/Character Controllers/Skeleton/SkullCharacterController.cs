@@ -5,11 +5,16 @@ using UnityEngine;
 
 public class SkullCharacterController : MonoBehaviour, SkeletonController {
 
-[SerializeField] new private Rigidbody2D rigidbody;
-[SerializeField] private float speed = 0f;
+    [SerializeField] new private Rigidbody2D rigidbody;
+    [SerializeField] private FMODUnity.StudioEventEmitter rollingSound;
+    [SerializeField] private FMODUnity.StudioEventEmitter rollingCollision;
+    [SerializeField] private float speed = 0f;
+    [SerializeField] private float soundSpeed;
 
-[HideInInspector] public bool isActive = false;
-private float horizontal = 0f;
+    private int collidersTouching = 0;
+    [HideInInspector] public bool isActive = false;
+    private float horizontal = 0f;
+
     // Start is called before the first frame update
     void Start()
     {
@@ -26,6 +31,24 @@ private float horizontal = 0f;
         float torque = horizontal * speed * -1f;
 
         rigidbody.AddTorque(torque, ForceMode2D.Force); 
+
+        if(rigidbody.angularVelocity > soundSpeed && collidersTouching > 0) {
+            rollingSound.Play();
+        } else {
+            rollingSound.Stop();
+        }
+
+        Debug.Log(collidersTouching);
+    }
+
+    
+    void OnCollisionEnter2D(Collision2D col) {
+        collidersTouching++;
+        rollingCollision.Play();
+    }
+
+    void OnCollisionExit2D(Collision2D col) {
+        collidersTouching--;
     }
 
     public void switchActive() {

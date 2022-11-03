@@ -8,11 +8,15 @@ public class CatCharacterMovement : MonoBehaviour
     [SerializeField] private DialogueManager dialogueManager;
     [SerializeField] private Animator animator;
     [SerializeField] private new Camera camera;
+
+    // Sound Emitters
     [SerializeField] FMODUnity.StudioEventEmitter footstepsEmitter;
+    [SerializeField] FMODUnity.StudioEventEmitter swatEmitter;
 
     //Tuning Variables
     [SerializeField] private float speed = 0f;
     [SerializeField] private float maxJumpDist;
+    [SerializeField] private int swatCooldown = 0;
 
     [HideInInspector] public bool isActive = true;
     private float horizontal = 0f;
@@ -22,6 +26,7 @@ public class CatCharacterMovement : MonoBehaviour
     private bool rightMouse = false;
     private bool shiftDown = false;
     private float horizontalMove = 0f;
+    private int swatCooldownTimer = 0;
 
     // Start is called before the first frame update.
     void Start()
@@ -31,22 +36,6 @@ public class CatCharacterMovement : MonoBehaviour
 
     // Update is called once per frame.
     void Update()
-    {
-        if (isActive) {
-
-            //TESTING:
-            //--------------------------------------------------------------------------------------------
-
-            if (rightMouse) {
-                dialogueManager.triggerDialogue(3);
-            }
-
-            //--------------------------------------------------------------------------------------------
-        }
-    }
-
-    // FixedUpdate is called independently of frames, and so is used for physics calculations.
-    void FixedUpdate()
     {
         if (isActive) {
             //INPUTS:
@@ -59,14 +48,18 @@ public class CatCharacterMovement : MonoBehaviour
             // These 2 variables get the player's clicks
             leftMouse = Input.GetButton("Fire1");
 
-            rightMouse = Input.GetButtonDown("Fire2");
+            rightMouse = Input.GetButton("Fire2");
 
             //These variables get the player's other inputs
             
             shiftDown = Input.GetButton("Fire3");
 
         }
+    }
 
+    // FixedUpdate is called independently of frames, and so is used for physics calculations.
+    void FixedUpdate()
+    {
         //--------------------------------------------------------------------------------------------
         //AUDIO & ANIMATION:
         //--------------------------------------------------------------------------------------------
@@ -88,7 +81,30 @@ public class CatCharacterMovement : MonoBehaviour
 
         controller.Move(horizontalMove * Time.fixedDeltaTime);
         
-        if (controller.Grounded() && (leftMouse || leftMouseWasDown)) {
+        // Swatting Section
+        if(controller.Grounded() && rightMouse && swatCooldownTimer > swatCooldown) {
+            // Cancel Jump
+            leftMouse = false;
+            leftMouseWasDown = false;
+
+            Vector3 mousePos = camera.ScreenToWorldPoint(Input.mousePosition);
+            Vector2 mouseDirection = (Vector2)(mousePos - transform.position);
+            mouseDirection = mouseDirection.normalized;
+
+            controller.FaceDirection(mouseDirection);
+
+            animator.Play("cat_swat");
+            swatEmitter.Play();
+
+            controller.Swat(mouseDirection);
+
+            swatCooldownTimer = 0;
+        } else {
+            swatCooldownTimer++;
+        }
+
+        // Jumping Section
+        if (controller.Grounded() && (leftMouse || leftMouseWasDown) && isActive) {
             //Find difference between mouse position (in worldspace) and cat position
             Vector3 mousePos = Input.mousePosition;
             Vector3 catPos = camera.WorldToScreenPoint(transform.position);
@@ -97,18 +113,22 @@ public class CatCharacterMovement : MonoBehaviour
             catToMouse.x = catToMouse.x / Screen.width * arbitraryValue;
             catToMouse.y = catToMouse.y / Screen.height * arbitraryValue;
             catToMouse.z = 0f;
+
             // Limit jump strength
-            Debug.Log("Before: " + catToMouse);
             catToMouse = Vector3.ClampMagnitude(catToMouse, maxJumpDist);
-            Debug.Log("After: " + catToMouse);
             
             // Face towards mouse
             controller.FaceDirection(catToMouse);
             
             if (!leftMouse) {
                 // Jump
+                controller.HideJumpGuides();
                 controller.Jump(catToMouse, catToMouse.magnitude);
+            } else {
+                controller.RenderJumpGuides(catToMouse, catToMouse.magnitude);
             }
+        } else {
+            controller.HideJumpGuides();
         }
 
         //--------------------------------------------------------------------------------------------

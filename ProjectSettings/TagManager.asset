@@ -13,7 +13,7 @@ TagManager:
   - UI
   - Ground
   - Skeleton
-  - 
+  - Physics Objects
   - 
   - 
   - 
@@ -46,6 +46,9 @@ TagManager:
     locked: 0
   - name: Environment
     uniqueID: 2162290831
+    locked: 0
+  - name: Physics Objects
+    uniqueID: 1960744441
     locked: 0
   - name: Player
     uniqueID: 163379317
