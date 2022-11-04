@@ -13,7 +13,10 @@ public class DialogueController : MonoBehaviour
     [SerializeField] private new Camera camera;
     [SerializeField] private float vertOffset;
     [SerializeField] private float horiOffset;
+    [SerializeField] FMODUnity.StudioEventEmitter startSpeakingSound;
+    [SerializeField] FMODUnity.StudioEventEmitter speakingSound;
 
+    private static float postSpeakBuffer = .5f;
     [HideInInspector] public bool speaking;
     [HideInInspector] private Queue<Dialogue.DialogueLine> lineQueue;
 
@@ -55,8 +58,9 @@ public class DialogueController : MonoBehaviour
         while(lineQueue.Count > 0) {
             Dialogue.DialogueLine dialogueLine = lineQueue.Dequeue();
             
-            Debug.Log("Speaking");
             text.text = dialogueLine.text;
+            startSpeakingSound.Play();
+            speakingSound.Play();
 
             /*
             foreach (char letter in dialogueLine.text.ToCharArray())
@@ -67,6 +71,8 @@ public class DialogueController : MonoBehaviour
             */
 
             yield return new WaitForSeconds(dialogueLine.lingerDuration);
+            speakingSound.Stop();
+            yield return new WaitForSeconds(postSpeakBuffer);
         }
         endSpeaking();
         //yield return new WaitForSeconds(0); // This is some bullshit to ensure we always return something.

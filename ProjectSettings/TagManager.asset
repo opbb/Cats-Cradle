@@ -14,8 +14,8 @@ TagManager:
   - Ground
   - Skeleton
   - Physics Objects
-  - 
-  - 
+  - Sound
+  - Walls
   - 
   - 
   - 
@@ -43,6 +43,9 @@ TagManager:
     locked: 0
   - name: Default
     uniqueID: 0
+    locked: 0
+  - name: Guides
+    uniqueID: 2685340087
     locked: 0
   - name: Environment
     uniqueID: 2162290831

@@ -9,6 +9,9 @@ public class DialogueManager : MonoBehaviour {
     [SerializeField] private DialogueController catDialogueController;
     [SerializeField] private DialogueController skeletonDialogueController;
     [SerializeField] private float defaultTalkSpeed;
+    [SerializeField] private float defaultLingetTime;
+
+    [HideInInspector] private Queue<Dialogue.DialogueLine> lineQueue;
 
     //List of all lines
     private List<Dialogue.DialogueLine> allLines = new List<Dialogue.DialogueLine>();
@@ -18,6 +21,12 @@ public class DialogueManager : MonoBehaviour {
     void Start()
     {
         loadDialogue("Assets/Dialogue/Dialogue.tsv");
+        lineQueue = new Queue<Dialogue.DialogueLine>();
+    }
+
+    void Update()
+    {
+        makeSpeak();
     }
 
     private void loadDialogue(string path) {
@@ -37,12 +46,12 @@ public class DialogueManager : MonoBehaviour {
             string[] lineComponents = line.Split("\t");
 
             string text = lineComponents[0];
-            bool isSkeleton = lineComponents[1] == "1";
+            bool isSkeleton = lineComponents[1] == "Skeleton";
             float talkSpeed = float.Parse(lineComponents[2]) * defaultTalkSpeed;
             float lingerDuration = float.Parse(lineComponents[3]);
+            int followingLine = int.Parse(lineComponents[4]);
 
-
-            Dialogue.DialogueLine dialogueLine = new Dialogue.DialogueLine(text, isSkeleton, talkSpeed, lingerDuration);
+            Dialogue.DialogueLine dialogueLine = new Dialogue.DialogueLine(text, isSkeleton, talkSpeed, lingerDuration, followingLine);
 
             allLines.Add(dialogueLine);
         }
@@ -62,11 +71,23 @@ public class DialogueManager : MonoBehaviour {
     public void triggerDialogue(int lineNumber) {
         // Get line
         Dialogue.DialogueLine dialogueLine = allLines[sheetToIndex(lineNumber)];
+        
+        lineQueue.Enqueue(dialogueLine);
 
-        if (dialogueLine.isSkeleton) {
-            skeletonDialogueController.Speak(dialogueLine);
-        } else {
-            catDialogueController.Speak(dialogueLine);
+        if (dialogueLine.followingLine != -1) {
+            triggerDialogue(dialogueLine.followingLine);
+        }
+    }
+
+    private void makeSpeak() {
+        if (lineQueue.Count > 0 && !(catDialogueController.speaking || skeletonDialogueController.speaking)) {
+            Dialogue.DialogueLine dialogueLine = lineQueue.Dequeue();
+
+            if (dialogueLine.isSkeleton) {
+                skeletonDialogueController.Speak(dialogueLine);
+            } else {
+                catDialogueController.Speak(dialogueLine);
+            }
         }
     }
 }

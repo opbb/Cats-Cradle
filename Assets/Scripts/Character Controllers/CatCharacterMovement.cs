@@ -52,8 +52,7 @@ public class CatCharacterMovement : MonoBehaviour
 
             //These variables get the player's other inputs
             
-            shiftDown = Input.GetButton("Fire3");
-
+            shiftDown = Input.GetButtonDown("Fire3");
         }
     }
 
@@ -118,16 +117,25 @@ public class CatCharacterMovement : MonoBehaviour
             catToMouse = Vector3.ClampMagnitude(catToMouse, maxJumpDist);
             
             // Face towards mouse
-            controller.FaceDirection(catToMouse);
+            if (speedParam < .01f) {
+                controller.FaceDirection(catToMouse);
+            }
             
             if (!leftMouse) {
                 // Jump
+                animator.Play("cat_jump");
+                animator.SetBool("readyJump", false);
                 controller.HideJumpGuides();
                 controller.Jump(catToMouse, catToMouse.magnitude);
             } else {
+                if (!animator.GetBool("readyJump") && speedParam < .01f) {
+                    animator.SetBool("readyJump", true);
+                    animator.Play("cat_ready-jump");
+                }
                 controller.RenderJumpGuides(catToMouse, catToMouse.magnitude);
             }
         } else {
+            animator.SetBool("readyJump", false);
             controller.HideJumpGuides();
         }
 

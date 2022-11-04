@@ -30,6 +30,7 @@ public class CatCharacterController : MonoBehaviour
 	[Header("Events")]
 	[Space]
 
+	public UnityEvent OnJumpEvent;
 	public UnityEvent OnLandEvent;
 
 	[System.Serializable]
@@ -41,6 +42,9 @@ public class CatCharacterController : MonoBehaviour
 
 		if (OnLandEvent == null)
 			OnLandEvent = new UnityEvent();
+
+		if (OnJumpEvent == null)
+			OnJumpEvent = new UnityEvent();
 
 		jumpGuides = new GameObject[numJumpGuides];
 
@@ -104,6 +108,7 @@ public class CatCharacterController : MonoBehaviour
 		}
 		*/
 
+		m_animator.SetFloat("vertSpeed", m_Rigidbody2D.velocity.y);
 		m_animator.SetBool("grounded", m_Grounded);
 	}
 
@@ -118,6 +123,10 @@ public class CatCharacterController : MonoBehaviour
 			Vector3 targetVelocity = new Vector2(move * 10f, m_Rigidbody2D.velocity.y);
 			// And then smoothing it out and applying it to the character
 			m_Rigidbody2D.velocity = Vector3.SmoothDamp(m_Rigidbody2D.velocity, targetVelocity, ref m_Velocity, m_MovementSmoothing);
+
+			if (move > .01f && !m_animator.GetCurrentAnimatorStateInfo(0).IsName("cat_run") && !m_animator.GetCurrentAnimatorStateInfo(0).IsName("cat_swat")) {
+				m_animator.Play("cat_run");
+			}
 
 			// If the input is moving the player right and the player is facing left...
 			if (move > 0 && !m_FacingRight)
@@ -175,6 +184,7 @@ public class CatCharacterController : MonoBehaviour
 
 	public void Jump(Vector2 jumpDirection, float jumpForce) {
 		m_Rigidbody2D.velocity = calculateJump(jumpDirection, jumpForce);
+		OnJumpEvent.Invoke();
 	}
 
 	public void RenderJumpGuides(Vector2 jumpDirection, float jumpForce) {

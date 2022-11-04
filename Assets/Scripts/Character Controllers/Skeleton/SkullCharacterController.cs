@@ -37,8 +37,6 @@ public class SkullCharacterController : MonoBehaviour, SkeletonController {
         } else {
             rollingSound.Stop();
         }
-
-        Debug.Log(collidersTouching);
     }
 
     

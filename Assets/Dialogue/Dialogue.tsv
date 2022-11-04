@@ -1,3 +1,33 @@
-Dialogue	Speaker  (0 for cat,  1 for skeleton)	Text Read Speed (Slowest = 0,  Standard = 1, Fastest = 2)	Linger Time (Standard = 1, None = 0) (I multiply linger time by this number)	Description 	Trigger Description		Note: Nothing to the right of the line is read by the code, that is for humans only and you can change it how you see fit. This top line is also ignored. PLEASE DONT REARRANGE ROWS OR COLUMNS. That will majorly fuck with the script that reads this. Sorry.
-This is a test phrase.	1	1	1	For testing	I will make it trigger on click or something		
-Meow.	0	1	1	For testing			
+Dialogue	Speaker  (0 for cat,  1 for skeleton)	Text Read Speed (Slowest = 0,  Standard = 1, Fastest = 2)	Linger Time (In Seconds)	Line that follows this one (Put the row number of the line, or make it -1 if nothing follows)	Trigger Description	Description 		Note: Nothing to the right of the line is read by the code, that is for humans only and you can change it how you see fit. This top line is also ignored. PLEASE DONT REARRANGE ROWS OR COLUMNS. That will majorly fuck with the script that reads this. Sorry.
+This is a test phrase.	Skeleton	1	2	3	I will make it trigger on click or something	For testing		
+Meow.	Cat	1	2	-1		For testing		
+AAAH!!!	Skeleton	2	2	5	Start tutorial or when cat moves near skull	Tutorial		
+OH, sorry! Didn't mean to spook you!	Skeleton	1	2	6	Trigger on click during scene	Tutorial		
+I was just looking for something and I simply got too focused trying to get around.	Skeleton	1	2	7	Trigger on click during scene	Tutorial		
+Meow?	Cat	1	2	8	Trigger on click during scene	Tutorial dialogue		
+What I'm looking for? Just my body. I woke up and poof! It was gone.	Skeleton	1	2	9	Trigger on click during scene	Tutorial dialogue		
+Mreow?	Cat	1	2	10	Trigger on click during scene	Tutorial dialogue		
+Me? I know it starts with an M... 	Skeleton	0	3	11	Trigger on click during scene	Tutorial dialogue		
+I think it's Mandi, short for Mandible. You look eerily familiar by the way... What's your name?	Skeleton	1	2	12	Trigger on click during scene	Tutorial dialogue		
+Meo-ow!	Cat	1	2	13	Trigger on click during scene	Tutorial dialogue		
+What a lovely name! Nice to meet you, Solas. What are you doing in these parts?	Skeleton	1	2	14	Trigger on click during scene	Tutorial dialogue		
+Meeeooow.	Cat	0	2	15	Trigger on click during scene	Tutorial dialogue		
+You're looking for your witch, huh? I think I saw a witch's hut recently!	Skeleton	1	2	16	Trigger on click during scene	Tutorial dialogue		
+Here's an idea! If you help me get around and find my body, I can do the same for you with your witch!	Skeleton	1	2	17	Trigger on click during scene	Tutorial dialogue		
+Deal?	Skeleton	1	1	18	Trigger on click during scene	Tutorial dialogue		
+Meow!	Cat	2	1	19	Trigger on click during scene	Tutorial dialogue		
+I like the sound of that! 	Skeleton	1	2	20	Trigger on click during scene	Tutorial dialogue		
+Why don't you try jumping on those stones to get some height?	Skeleton	1	2	-1	Trigger on click during scene	End tutorial dialogue		
+Yes, yes! This must be the way. Something about this rings a bell. Have you spotted a bone or two yet?	Skeleton	1	4	22	Start level 1 when entering level	Level 1 dialogue		
+Meow...	Cat	2	2	23	Trigger on click during scene	Level 1 dialogue		
+Don't sweat it! I'm sure we'll find something here.	Skeleton	1	2	-1	Trigger on click during scene	Level 1 dialogue		
+Thank you for finding my arms! It's nice to have someone to lean on. I felt like a total numbskull when I was just rolling around.	Skeleton	1	4	-1	Trigger on click during scene	Level 1 dialogue		
+...	Skeleton	0	2	-1	Trigger on click during scene	Level 1 dialogue		
+Wait a minute... we found my funnybone! I'm humerous again! 	Skeleton	1	2	27	Trigger on click during scene	Level 1 dialogue		
+And I think I remember where to go next! I'd say that's the mark of a bone-afide genius, hihihi.	Skeleton	1	2	-1	Trigger on click during scene	Level 1 dialogue		
+Careful! We don't want to break one of them	Skeleton	1	2	-1	Jumping over one of the middle graves	Level 1 grave jump trigger		
+Haha! Take that!	Skeleton	1	2	-1	Slapping flowers for the first time	Level 1 flower slap		
+There you go, I know you can do it!	Skeleton	1	2	-1	Skull is rolled uphill	Level 1 Skull being rolled midhill		
+Wooooaaaaaaa!	Skeleton	1	2	-1	Skull is rolled through tunnel	Level 1 		
+Meeooow!	Cat	1	2	-1	Cat jumps over tunnel	Level 1		
+Weeeeeeeeeee!	Skeleton	1	2	-1	Skull is launched from ramp			

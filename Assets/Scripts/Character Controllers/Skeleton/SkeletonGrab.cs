@@ -41,11 +41,9 @@ public class SkeletonGrab : MonoBehaviour
 
     private void OnCollisionEnter2D(Collision2D col)
     {
-        Debug.Log("In On Trigger Enter");
         int layer = col.gameObject.layer; // The layer this collision is with.
         if (hold && (grabbable == (grabbable | (1 << layer))) /* checks if the layer is in the layermask somehow, idk */) {
 
-            Debug.Log("Registered as grabbable");
             Rigidbody2D rb = col.transform.GetComponent<Rigidbody2D>();
             if (rb == null) {
                 FixedJoint2D fj = transform.gameObject.AddComponent(typeof(FixedJoint2D)) as FixedJoint2D;
