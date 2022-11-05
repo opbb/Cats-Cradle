@@ -21,13 +21,14 @@ Why don't you try jumping on those stones to get some height?	Skeleton	1	2	-1	Tr
 Yes, yes! This must be the way. Something about this rings a bell. Have you spotted a bone or two yet?	Skeleton	1	4	22	Start level 1 when entering level	Level 1 dialogue		
 Meow...	Cat	2	2	23	Trigger on click during scene	Level 1 dialogue		
 Don't sweat it! I'm sure we'll find something here.	Skeleton	1	2	-1	Trigger on click during scene	Level 1 dialogue		
-Thank you for finding my arms! It's nice to have someone to lean on. I felt like a total numbskull when I was just rolling around.	Skeleton	1	4	-1	Trigger on click during scene	Level 1 dialogue		
-...	Skeleton	0	2	-1	Trigger on click during scene	Level 1 dialogue		
+Thank you for finding my arms! It's nice to have someone to lean on. I felt like a total numbskull when I was just rolling around.	Skeleton	1	4	25	Trigger on click during scene	Level 1 dialogue		
+...	Skeleton	0	2	26	Trigger on click during scene	Level 1 dialogue		
 Wait a minute... we found my funnybone! I'm humerous again! 	Skeleton	1	2	27	Trigger on click during scene	Level 1 dialogue		
-And I think I remember where to go next! I'd say that's the mark of a bone-afide genius, hihihi.	Skeleton	1	2	-1	Trigger on click during scene	Level 1 dialogue		
+And I think I remember where to go next! I'd say that's the mark of a bone-afide genius, hihihi.	Skeleton	1	2	34	Trigger on click during scene	Level 1 dialogue		
 Careful! We don't want to break one of them	Skeleton	1	2	-1	Jumping over one of the middle graves	Level 1 grave jump trigger		
 Haha! Take that!	Skeleton	1	2	-1	Slapping flowers for the first time	Level 1 flower slap		
 There you go, I know you can do it!	Skeleton	1	2	-1	Skull is rolled uphill	Level 1 Skull being rolled midhill		
 Wooooaaaaaaa!	Skeleton	1	2	-1	Skull is rolled through tunnel	Level 1 		
 Meeooow!	Cat	1	2	-1	Cat jumps over tunnel	Level 1		
 Weeeeeeeeeee!	Skeleton	1	2	-1	Skull is launched from ramp			
+EndLevel	Cat	1	0	-1	E	End Level		
