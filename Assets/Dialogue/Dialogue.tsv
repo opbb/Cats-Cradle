@@ -31,4 +31,9 @@ There you go, I know you can do it!	Skeleton	1	2	-1	Skull is rolled uphill	Level
 Wooooaaaaaaa!	Skeleton	1	2	-1	Skull is rolled through tunnel	Level 1 		
 Meeooow!	Cat	1	2	-1	Cat jumps over tunnel	Level 1		
 Weeeeeeeeeee!	Skeleton	1	2	-1	Skull is launched from ramp			
-EndLevel	Cat	1	0	-1	E	End Level		
+_End Card		1	0	-1	Set this as the line that follows the last piece of dialogue in a level 3 to make it switch to the end card once they stop talking.	End Level		
+_Main Menu		1	0	-1	Use this to switch to the main menu?			
+_Level 1		1	0	-1	Use this to switch to the beginning of level 1			
+_Level 2		1	0	-1	Set this as the line that follows the last piece of dialogue in a level 1 to make it switch to level 2 once they stop talking.			
+_Level 3		1	0	-1	Set this as the line that follows the last piece of dialogue in a level 2 to make it switch to level 3 once they stop talking.			
+_Exit Game		1	0	-1	Use this to quit the game?			

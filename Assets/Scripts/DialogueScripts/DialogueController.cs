@@ -15,7 +15,7 @@ public class DialogueController : MonoBehaviour
     [SerializeField] private float horiOffset;
     [SerializeField] FMODUnity.StudioEventEmitter startSpeakingSound;
     [SerializeField] FMODUnity.StudioEventEmitter speakingSound;
-    [SerializeField] PauseMenu levelManager;
+    [SerializeField] LevelManager levelManager;
 
     private static float postSpeakBuffer = .5f;
     [HideInInspector] public bool speaking;
@@ -59,12 +59,15 @@ public class DialogueController : MonoBehaviour
         while(lineQueue.Count > 0) {
             Dialogue.DialogueLine dialogueLine = lineQueue.Dequeue();
             
-            if (dialogueLine.text != "EndLevel") {
+            //Debug.Log("");
+
+            if (dialogueLine.text.Substring(0,1) != "_") {
                 text.text = dialogueLine.text;
                 startSpeakingSound.Play();
                 speakingSound.Play();
             } else {
-                levelManager.EndLevel();
+                // Execute the string after the _
+                levelManager.ExecuteCommand(dialogueLine.text);
             }
 
             /*

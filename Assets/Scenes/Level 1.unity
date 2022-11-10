@@ -1964,6 +1964,50 @@ SpriteRenderer:
   m_WasSpriteAssigned: 1
   m_MaskInteraction: 0
   m_SpriteSortPoint: 0
+--- !u!1 &699066021
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 699066023}
+  - component: {fileID: 699066022}
+  m_Layer: 0
+  m_Name: LevelManager
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!114 &699066022
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 699066021}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d6258ccdac4e8e44dab5440963951168, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!4 &699066023
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 699066021}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: -24.001976, y: -0.2533942, z: 11.159434}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_RootOrder: 7
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &809632481
 GameObject:
   m_ObjectHideFlags: 0
@@ -2209,9 +2253,9 @@ SpriteRenderer:
   m_AutoUVMaxDistance: 0.5
   m_AutoUVMaxAngle: 89
   m_LightmapParameters: {fileID: 0}
-  m_SortingLayerID: 0
-  m_SortingLayer: 0
-  m_SortingOrder: 0
+  m_SortingLayerID: -2146276839
+  m_SortingLayer: -1
+  m_SortingOrder: 1
   m_Sprite: {fileID: 21300000, guid: fa96fabec3b320f4bb5587a0f0bc4c20, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
@@ -2472,11 +2516,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 7127595962137640651, guid: 75a986e860a4d654d9f27e86e5936593, type: 3}
       propertyPath: m_LocalPosition.x
-      value: 31.35
+      value: 30.94
       objectReference: {fileID: 0}
     - target: {fileID: 7127595962137640651, guid: 75a986e860a4d654d9f27e86e5936593, type: 3}
       propertyPath: m_LocalPosition.y
-      value: -3.85
+      value: -3.76
       objectReference: {fileID: 0}
     - target: {fileID: 7127595962137640651, guid: 75a986e860a4d654d9f27e86e5936593, type: 3}
       propertyPath: m_LocalPosition.z
@@ -2790,9 +2834,9 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 1456634366}
-        m_TargetAssemblyTypeName: PauseMenu, Assembly-CSharp
-        m_MethodName: ReloadLevel
+      - m_Target: {fileID: 699066022}
+        m_TargetAssemblyTypeName: LevelManager, Assembly-CSharp
+        m_MethodName: Level1
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -3095,9 +3139,9 @@ SpriteRenderer:
   m_AutoUVMaxDistance: 0.5
   m_AutoUVMaxAngle: 89
   m_LightmapParameters: {fileID: 0}
-  m_SortingLayerID: 0
-  m_SortingLayer: 0
-  m_SortingOrder: 0
+  m_SortingLayerID: -2146276839
+  m_SortingLayer: -1
+  m_SortingOrder: 2
   m_Sprite: {fileID: 21300000, guid: d023b5eae5e2adb488b6ff1ccb8e5688, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
@@ -3304,7 +3348,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 1456634361}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: c1ec4bb6514d3bd489569553b6870f16, type: 3}
+  m_Script: {fileID: 11500000, guid: 7d1461b57128d8041920982a76c62e23, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   pauseMenuUI: {fileID: 237894133}
@@ -4558,9 +4602,9 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 1456634366}
-        m_TargetAssemblyTypeName: PauseMenu, Assembly-CSharp
-        m_MethodName: ExitLevel
+      - m_Target: {fileID: 699066022}
+        m_TargetAssemblyTypeName: LevelManager, Assembly-CSharp
+        m_MethodName: MainMenu
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -5549,7 +5593,7 @@ PrefabInstance:
     - target: {fileID: 8746990088682447471, guid: 756939bfeed047243a7c423af699a99a, type: 3}
       propertyPath: levelManager
       value: 
-      objectReference: {fileID: 1456634366}
+      objectReference: {fileID: 699066022}
     - target: {fileID: 8746990088682447471, guid: 756939bfeed047243a7c423af699a99a, type: 3}
       propertyPath: speakingSound
       value: 
@@ -5586,7 +5630,7 @@ PrefabInstance:
     - target: {fileID: 9025417221961218659, guid: 4f939bd3cae26884296b720364296609, type: 3}
       propertyPath: levelManager
       value: 
-      objectReference: {fileID: 1456634366}
+      objectReference: {fileID: 699066022}
     - target: {fileID: 9025417222079562652, guid: 4f939bd3cae26884296b720364296609, type: 3}
       propertyPath: m_LocalPosition.x
       value: 0
