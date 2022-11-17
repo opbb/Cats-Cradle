@@ -13,11 +13,20 @@ public class PlayerManager : MonoBehaviour
     [SerializeField] private FullSkeletonController fullSkeleton;
     [SerializeField] private FMODUnity.StudioEventEmitter charSwitchEmitter;
 
+    private bool isSkeleton;
+
+    private FMOD.Studio.EventInstance instance;
+
+    public FMODUnity.EventReference fmodEvent;
+
     private SkeletonController skeletonController;
 
     // Start is called before the first frame update
     void Start()
     {
+
+        isSkeleton = false;
+
         if (fullSkeleton != null) {
             skeletonController = (SkeletonController) fullSkeleton;
         } else if (sansLegs != null) {
@@ -27,6 +36,10 @@ public class PlayerManager : MonoBehaviour
         } else {
             throw new Exception("No skeleton controller assigned.");
         }
+
+        instance = FMODUnity.RuntimeManager.CreateInstance(fmodEvent);
+        instance.start();
+        instance.setParameterByName("Character Switch", 0);
     }
 
     // Update is called once per frame
@@ -40,9 +53,17 @@ public class PlayerManager : MonoBehaviour
     }
 
     private void switchActive() {
+        isSkeleton = !isSkeleton;
         catController.switchActive();
         skeletonController.switchActive();
         camController.switchActive();
         charSwitchEmitter.Play();
+        
+        if (isSkeleton) {
+            instance.setParameterByName("Character Switch", 1);
+        } else {
+            instance.setParameterByName("Character Switch", 0);
+        }
+        
     }
 }

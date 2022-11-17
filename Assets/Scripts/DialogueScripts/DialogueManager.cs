@@ -10,6 +10,7 @@ public class DialogueManager : MonoBehaviour {
     [SerializeField] private DialogueController skeletonDialogueController;
     [SerializeField] private float defaultTalkSpeed;
     [SerializeField] private float defaultLingetTime;
+    [SerializeField] private TextAsset dialogueFile;
 
     [HideInInspector] private Queue<Dialogue.DialogueLine> lineQueue;
 
@@ -20,7 +21,7 @@ public class DialogueManager : MonoBehaviour {
     // Start is called before the first frame update
     void Start()
     {
-        loadDialogue("Assets/Dialogue/Dialogue.tsv");
+        loadDialogue(dialogueFile);
         lineQueue = new Queue<Dialogue.DialogueLine>();
     }
 
@@ -29,11 +30,11 @@ public class DialogueManager : MonoBehaviour {
         makeSpeak();
     }
 
-    private void loadDialogue(string path) {
+    private void loadDialogue(TextAsset dialogueFile) {
         
         // Reading file from location
 
-        StreamReader strReader = new StreamReader(path);
+        StringReader strReader = new StringReader(dialogueFile.text);
 
         strReader.ReadLine();
 

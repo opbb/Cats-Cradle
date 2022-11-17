@@ -16,6 +16,7 @@ public class CatCharacterMovement : MonoBehaviour
     //Tuning Variables
     [SerializeField] private float speed = 0f;
     [SerializeField] private float maxJumpDist;
+    [SerializeField] private float jumpDelay;
     [SerializeField] private int swatCooldown = 0;
 
     [HideInInspector] public bool isActive = true;
@@ -123,14 +124,15 @@ public class CatCharacterMovement : MonoBehaviour
             
             if (!leftMouse) {
                 // Jump
-                animator.Play("cat_jump");
+                //animator.Play("cat_jump");
                 animator.SetBool("readyJump", false);
                 controller.HideJumpGuides();
-                controller.Jump(catToMouse, catToMouse.magnitude);
+                //StartCoroutine(waitForJumpAnim(catToMouse, catToMouse.magnitude));
+                waitForJumpAnim(catToMouse, catToMouse.magnitude);
             } else {
                 if (!animator.GetBool("readyJump") && speedParam < .01f) {
                     animator.SetBool("readyJump", true);
-                    animator.Play("cat_ready-jump");
+                    //animator.Play("cat_ready-jump");
                 }
                 controller.RenderJumpGuides(catToMouse, catToMouse.magnitude);
             }
@@ -144,6 +146,13 @@ public class CatCharacterMovement : MonoBehaviour
         // Final Variable Updates
         leftMouseWasDown = leftMouse;
     }
+
+
+    private void waitForJumpAnim(Vector3 direction, float mag) {
+        //yield return new WaitForSeconds(jumpDelay);
+        controller.Jump(direction, mag);
+    }
+
 
     public void switchActive() {
         isActive = !isActive;

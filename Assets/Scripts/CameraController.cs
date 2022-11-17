@@ -6,7 +6,6 @@ public class CameraController : MonoBehaviour
 {
     [SerializeField] private Transform catTransform;
     [SerializeField] private Transform skeletonTransform;
-    [SerializeField] private Transform listener;
     [SerializeField] private float cameraDistance;
     public float verticalOffset;
     private bool catActive;
@@ -38,7 +37,6 @@ public class CameraController : MonoBehaviour
         Vector3 parentPos = activePos;
         Vector3 thisPos = new Vector3(parentPos.x, parentPos.y + verticalOffset, cameraDistance);
         transform.position = thisPos;
-        listener.position = activePos;
     }
     
     public void switchActive() {
