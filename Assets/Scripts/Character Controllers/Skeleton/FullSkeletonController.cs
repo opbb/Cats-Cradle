@@ -15,6 +15,7 @@ public class FullSkeletonController : MonoBehaviour, SkeletonController
     [SerializeField] private Transform playerPos;
     [SerializeField] private Rigidbody2D rb;
     [SerializeField] LayerMask grabbable;
+    [SerializeField] LayerMask grabbableSolid;
     
     private bool isActive = false;
     private float horizontal = 0f;
@@ -63,5 +64,9 @@ public class FullSkeletonController : MonoBehaviour, SkeletonController
 
     public LayerMask getGrabbable() {
         return grabbable;
+    }
+
+    public LayerMask getGrabbableSolid() {
+        return grabbableSolid;
     }
 }

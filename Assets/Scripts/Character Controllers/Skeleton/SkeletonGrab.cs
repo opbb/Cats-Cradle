@@ -13,6 +13,9 @@ public class SkeletonGrab : MonoBehaviour
 
     private SkeletonController skeletonController;
     private LayerMask grabbable;
+    private LayerMask grabbableSolid;
+    private bool isGrabbing;
+    private bool isGrabbingSolid;
 
     // Start is called before the first frame update
     void Start()
@@ -25,12 +28,30 @@ public class SkeletonGrab : MonoBehaviour
             throw new Exception("No skeleton controller assigned.");
         }
 
+        isGrabbing = false;
+
         grabbable = skeletonController.getGrabbable();
+        grabbableSolid = skeletonController.getGrabbableSolid();
     }
 
     // Update is called once per frame
     void Update()
     {
+        FixedJoint2D holdJoint = GetComponent<FixedJoint2D>();
+
+        isGrabbing = holdJoint != null;
+
+        if (isGrabbing) {
+            if (holdJoint.connectedBody == null) {
+                isGrabbingSolid = true;
+            } else {
+                int grabbedLayer = holdJoint.connectedBody.gameObject.layer;
+                isGrabbingSolid = isLayerInMask(grabbedLayer, grabbableSolid);
+            }
+        } else {
+            isGrabbingSolid = false;
+        }
+
         if (skeletonController.getIsActive()) {
             hold = Input.GetMouseButton(mouseButton);
             if(!hold) {
@@ -39,18 +60,29 @@ public class SkeletonGrab : MonoBehaviour
         }
     }
 
-    private void OnCollisionEnter2D(Collision2D col)
+    private void OnTriggerEnter2D(Collider2D col)
     {
         int layer = col.gameObject.layer; // The layer this collision is with.
-        if (hold && (grabbable == (grabbable | (1 << layer))) /* checks if the layer is in the layermask somehow, idk */) {
-
+        if (hold && isLayerInMask(layer, grabbable) /* checks if the layer is in the layermask somehow, idk */) {
             Rigidbody2D rb = col.transform.GetComponent<Rigidbody2D>();
             if (rb == null) {
                 FixedJoint2D fj = transform.gameObject.AddComponent(typeof(FixedJoint2D)) as FixedJoint2D;
-                fj.connectedBody = rb;
             } else {
                 FixedJoint2D fj = transform.gameObject.AddComponent(typeof(FixedJoint2D)) as FixedJoint2D;
+                fj.connectedBody = rb;
             }
         }
+    }
+
+    private bool isLayerInMask(int layer, LayerMask layerMask) {
+        return layerMask == (layerMask | (1 << layer));
+    }
+
+    public bool Grabbing() {
+        return isGrabbing;
+    }
+
+    public bool GrabbingSolid() {
+        return isGrabbingSolid;
     }
 }

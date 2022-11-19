@@ -47,8 +47,17 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   camController: {fileID: 0}
   catController: {fileID: 0}
-  skullController: {fileID: 0}
+  skull: {fileID: 0}
+  sansLegs: {fileID: 0}
+  fullSkeleton: {fileID: 0}
   charSwitchEmitter: {fileID: 879424514364402000}
+  fmodEvent:
+    Guid:
+      Data1: -259278617
+      Data2: 1117830788
+      Data3: -809767248
+      Data4: -1743163885
+    Path: event:/Music/Level 1/Grave
 --- !u!114 &879424514364402000
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -74,7 +83,7 @@ MonoBehaviour:
   StopEvent: 0
   AllowFadeout: 1
   TriggerOnce: 0
-  Preload: 0
+  Preload: 1
   Params: []
   OverrideAttenuation: 0
   OverrideMinDistance: 1

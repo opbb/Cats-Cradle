@@ -1,5 +1,129 @@
 %YAML 1.1
 %TAG !u! tag:unity3d.com,2011:
+--- !u!1 &3835975189853568609
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 3369193213163250913}
+  - component: {fileID: 4598617541957778983}
+  m_Layer: 9
+  m_Name: StartSpeakingSound
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &3369193213163250913
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3835975189853568609}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 8746990088682447465}
+  m_RootOrder: 1
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &4598617541957778983
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3835975189853568609}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9a6610d2e704f1648819acc8d7460285, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  CollisionTag: 
+  EventReference:
+    Guid:
+      Data1: 926016895
+      Data2: 1241199459
+      Data3: -1462502491
+      Data4: -70358428
+    Path: event:/Character/Skeleton/Skeleton_DialogueRattle
+  Event: 
+  PlayEvent: 0
+  StopEvent: 0
+  AllowFadeout: 1
+  TriggerOnce: 0
+  Preload: 1
+  Params: []
+  OverrideAttenuation: 0
+  OverrideMinDistance: 1
+  OverrideMaxDistance: 20
+--- !u!1 &3976481526125311187
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 8045375154878731491}
+  - component: {fileID: 8271370543703282057}
+  m_Layer: 9
+  m_Name: SpeakingSound
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &8045375154878731491
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3976481526125311187}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 8746990088682447465}
+  m_RootOrder: 2
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &8271370543703282057
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3976481526125311187}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9a6610d2e704f1648819acc8d7460285, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  CollisionTag: 
+  EventReference:
+    Guid:
+      Data1: 2027527121
+      Data2: 1107261982
+      Data3: 1331344011
+      Data4: 2088859690
+    Path: event:/Character/Skeleton/Skeleton_DialogueScroll
+  Event: 
+  PlayEvent: 0
+  StopEvent: 0
+  AllowFadeout: 1
+  TriggerOnce: 0
+  Preload: 1
+  Params: []
+  OverrideAttenuation: 0
+  OverrideMinDistance: 1
+  OverrideMaxDistance: 20
 --- !u!1 &8746990088375647657
 GameObject:
   m_ObjectHideFlags: 0
@@ -11,7 +135,6 @@ GameObject:
   - component: {fileID: 8746990088375647653}
   - component: {fileID: 8746990088375647659}
   - component: {fileID: 8746990088375647656}
-  - component: {fileID: 8746990088375647658}
   m_Layer: 5
   m_Name: SkullDialogueText
   m_TagString: Untagged
@@ -78,7 +201,7 @@ MeshRenderer:
   m_AutoUVMaxAngle: 89
   m_LightmapParameters: {fileID: 0}
   m_SortingLayerID: 1257684653
-  m_SortingLayer: 3
+  m_SortingLayer: 5
   m_SortingOrder: 10
   m_AdditionalVertexStreams: {fileID: 0}
 --- !u!114 &8746990088375647656
@@ -174,21 +297,6 @@ MonoBehaviour:
   m_hasFontAssetChanged: 0
   m_renderer: {fileID: 8746990088375647659}
   m_maskType: 0
---- !u!114 &8746990088375647658
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 8746990088375647657}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: b35d5a9a5bce718469e34cf195f7d3cc, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  catDialogueController: {fileID: 0}
-  skeletonDialogueController: {fileID: 0}
-  defaultTalkSpeed: 0
 --- !u!1 &8746990088682447468
 GameObject:
   m_ObjectHideFlags: 0
@@ -220,6 +328,8 @@ Transform:
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 8746990088375647653}
+  - {fileID: 3369193213163250913}
+  - {fileID: 8045375154878731491}
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -262,7 +372,7 @@ SpriteRenderer:
   m_AutoUVMaxAngle: 89
   m_LightmapParameters: {fileID: 0}
   m_SortingLayerID: 1257684653
-  m_SortingLayer: 3
+  m_SortingLayer: 5
   m_SortingOrder: 0
   m_Sprite: {fileID: 21300000, guid: f3dc342450315814a93f41de9d9a305e, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
@@ -291,6 +401,9 @@ MonoBehaviour:
   text: {fileID: 8746990088375647656}
   speechBubble: {fileID: 8746990088682447470}
   camera: {fileID: 0}
-  vertOffset: 2.5
+  vertOffset: 3.5
   horiOffset: 0
+  startSpeakingSound: {fileID: 4598617541957778983}
+  speakingSound: {fileID: 8271370543703282057}
+  levelManager: {fileID: 0}
   speaking: 0

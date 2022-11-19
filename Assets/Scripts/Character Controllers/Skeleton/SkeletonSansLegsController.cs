@@ -10,6 +10,9 @@ public class SkeletonSansLegsController : MonoBehaviour, SkeletonController
     [SerializeField] private float horizontalForce;
     [SerializeField] private float floatDistance;
     [SerializeField] LayerMask grabbable;
+    [SerializeField] LayerMask grabbableSolid;
+    [SerializeField] SkeletonGrab leftHand;
+    [SerializeField] SkeletonGrab rightHand;
     private bool isActive = false;
     private float horizontal = 0f;
     private float vertical = 0f;
@@ -38,9 +41,7 @@ public class SkeletonSansLegsController : MonoBehaviour, SkeletonController
 
     void FixedUpdate()
     {
-        RaycastHit2D[] colliders = Physics2D.CircleCastAll(torso.transform.position, floatDistance * torso.transform.lossyScale.x, Vector2.down, .01f, grabbable, -1f, 1f);
-    
-        if (colliders.Length > 0) {
+        if (leftHand.GrabbingSolid() || rightHand.GrabbingSolid()) {
             torso.AddForce(new Vector2(horizontal * horizontalForce, vertical * verticalForce));
         } 
     }
@@ -57,5 +58,9 @@ public class SkeletonSansLegsController : MonoBehaviour, SkeletonController
 
     public LayerMask getGrabbable() {
         return grabbable;
+    }
+
+    public LayerMask getGrabbableSolid() {
+        return grabbableSolid;
     }
 }

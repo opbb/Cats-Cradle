@@ -11,6 +11,8 @@ using UnityEngine;
         bool getIsActive();
 
         LayerMask getGrabbable();
+
+        LayerMask getGrabbableSolid();
     }
 
 //}
