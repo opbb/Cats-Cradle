@@ -38,7 +38,7 @@ public class CatCharacterMovement : MonoBehaviour
     // Update is called once per frame.
     void Update()
     {
-        if (isActive) {
+        if (isActive && !controller.Climbing()) {
             //INPUTS:
             //--------------------------------------------------------------------------------------------
 
@@ -124,15 +124,12 @@ public class CatCharacterMovement : MonoBehaviour
             
             if (!leftMouse) {
                 // Jump
-                //animator.Play("cat_jump");
                 animator.SetBool("readyJump", false);
                 controller.HideJumpGuides();
-                //StartCoroutine(waitForJumpAnim(catToMouse, catToMouse.magnitude));
-                waitForJumpAnim(catToMouse, catToMouse.magnitude);
+                controller.Jump(catToMouse, catToMouse.magnitude);
             } else {
                 if (!animator.GetBool("readyJump") && speedParam < .01f) {
                     animator.SetBool("readyJump", true);
-                    //animator.Play("cat_ready-jump");
                 }
                 controller.RenderJumpGuides(catToMouse, catToMouse.magnitude);
             }
@@ -146,13 +143,6 @@ public class CatCharacterMovement : MonoBehaviour
         // Final Variable Updates
         leftMouseWasDown = leftMouse;
     }
-
-
-    private void waitForJumpAnim(Vector3 direction, float mag) {
-        //yield return new WaitForSeconds(jumpDelay);
-        controller.Jump(direction, mag);
-    }
-
 
     public void switchActive() {
         isActive = !isActive;

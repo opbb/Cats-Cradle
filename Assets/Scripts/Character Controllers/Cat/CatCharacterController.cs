@@ -19,6 +19,9 @@ public class CatCharacterController : MonoBehaviour
 	[SerializeField] private float swatSize; 
 	[SerializeField] private float swatForce; 
 	[SerializeField] private float swatDist; 
+	[SerializeField] private float grabVelDeadzone; 
+	[SerializeField] private float grabTeleportHeight; 
+	[SerializeField] private float grabLockLength; 
 
 	private GameObject[] jumpGuides;
 	const float k_GroundedRadius = .2f; // Radius of the overlap circle to determine if grounded
@@ -26,6 +29,9 @@ public class CatCharacterController : MonoBehaviour
 	private Rigidbody2D m_Rigidbody2D;
 	private bool m_FacingRight = true;  // For determining which way the player is currently facing.
 	private Vector3 m_Velocity = Vector3.zero;
+	private bool m_Climbing; 			// Whether or not the player is climbing.
+	private Collider2D m_Collider; 		// The cat's collider
+	private float defaultGravity; 		// The cat's deafault gravity value
 
 	[Header("Events")]
 	[Space]
@@ -39,6 +45,9 @@ public class CatCharacterController : MonoBehaviour
 	private void Awake()
 	{
 		m_Rigidbody2D = GetComponent<Rigidbody2D>();
+		m_Collider = (Collider2D)GetComponent<CapsuleCollider2D>();
+		m_Climbing = false;
+		defaultGravity = m_Rigidbody2D.gravityScale;
 
 		if (OnLandEvent == null)
 			OnLandEvent = new UnityEvent();
@@ -56,60 +65,26 @@ public class CatCharacterController : MonoBehaviour
 
 	private void FixedUpdate()
 	{
-		bool wasGrounded = m_Grounded;
-		m_Grounded = false;
+		if (!m_Climbing) {
+			bool wasGrounded = m_Grounded;
+			m_Grounded = false;
 
-		// The player is grounded if a circlecast to the groundcheck position hits anything designated as ground
-		// This can be done using layers instead but Sample Assets will not overwrite your project settings.
-		Collider2D[] colliders = Physics2D.OverlapAreaAll(m_GroundCheckLeft.position, m_GroundCheckRight.position, m_WhatIsGround, -1f, 1f);
-		for (int i = 0; i < colliders.Length; i++)
-		{
-			if (colliders[i].gameObject != gameObject)
+			// The player is grounded if a circlecast to the groundcheck position hits anything designated as ground
+			// This can be done using layers instead but Sample Assets will not overwrite your project settings.
+			Collider2D[] colliders = Physics2D.OverlapAreaAll(m_GroundCheckLeft.position, m_GroundCheckRight.position, m_WhatIsGround, -1f, 1f);
+			for (int i = 0; i < colliders.Length; i++)
 			{
-				m_Grounded = true;
-				if (!wasGrounded)
-					OnLandEvent.Invoke();
+				if (colliders[i].gameObject != gameObject)
+				{
+					m_Grounded = true;
+					if (!wasGrounded)
+						OnLandEvent.Invoke();
+				}
 			}
+
+			m_animator.SetFloat("vertSpeed", m_Rigidbody2D.velocity.y);
+			m_animator.SetBool("grounded", m_Grounded);
 		}
- /*
-		if(m_Grounded) {
-			transform.rotation.Set(0f,0f,0f,0f);
-		} else {
-			Vector2 velocity = m_Rigidbody2D.velocity;
-			if(velocity.x < 0f) {
-				// Make sure it's facing the right direction.
-				if (m_FacingRight) {
-					Flip();
-				}
-
-			
-			} else if (velocity.x > 0f) {
-				// Make sure it's facing the right direction.
-				if (!m_FacingRight) {
-					Flip();
-				}
-
-
-			}
-
-			if(velocity.x != 0f) {
-				Quaternion rotation = Quaternion.LookRotation(Vector3.forward, velocity);
-				Vector3 angles = rotation.eulerAngles;
-				Debug.Log(angles);
-				
-				if (angles.z > maxAngle) {
-					rotation.eulerAngles = new Vector3(0f,0f,maxAngle);
-				} else if (angles.z < -maxAngle) {
-					rotation.eulerAngles = new Vector3(0f,0f,-maxAngle);
-				}
-
-				transform.rotation = rotation;
-			}
-		}
-		*/
-
-		m_animator.SetFloat("vertSpeed", m_Rigidbody2D.velocity.y);
-		m_animator.SetBool("grounded", m_Grounded);
 	}
 
 
@@ -117,14 +92,14 @@ public class CatCharacterController : MonoBehaviour
 	{
 
 		//only control the player if grounded
-		if (m_Grounded)
+		if (m_Grounded && !m_Climbing)
 		{
 			// Move the character by finding the target velocity
 			Vector3 targetVelocity = new Vector2(move * 10f, m_Rigidbody2D.velocity.y);
 			// And then smoothing it out and applying it to the character
 			m_Rigidbody2D.velocity = Vector3.SmoothDamp(m_Rigidbody2D.velocity, targetVelocity, ref m_Velocity, m_MovementSmoothing);
 
-			if (move > .01f && !m_animator.GetCurrentAnimatorStateInfo(0).IsName("cat_run") && !m_animator.GetCurrentAnimatorStateInfo(0).IsName("cat_swat")) {
+			if ((move > .01f || move < -.01f) && !m_animator.GetCurrentAnimatorStateInfo(0).IsName("cat_run") && !m_animator.GetCurrentAnimatorStateInfo(0).IsName("cat_swat")) {
 				m_animator.Play("cat_run");
 			}
 
@@ -175,6 +150,12 @@ public class CatCharacterController : MonoBehaviour
 		return m_Grounded;
 	}
 
+	// Get m_Climbing variable
+	public bool Climbing() {
+		return m_Climbing;
+	}
+
+
 	private Vector3 calculateJump(Vector2 jumpDirection, float jumpForce) {
 		jumpDirection = jumpDirection.normalized;
 		Vector2 initialVelPred = m_Rigidbody2D.velocity * jumpVelocityTransfer;
@@ -204,5 +185,47 @@ public class CatCharacterController : MonoBehaviour
 		for (int i = 0; i < jumpGuides.Length; i++) {
 			((SpriteRenderer)(jumpGuides[i].GetComponent(typeof(SpriteRenderer)))).color = Color.clear; // Set sprite renderer to transparent
 		}
+	}
+
+
+	// Ledge grab section
+	// Conditions: Grab ledge IF
+	//      - You are not grounded
+	//      - You are not moving away from the ledge
+	//      - You your right/left ledge grab zone has a left/right ledge in it
+	//
+	// Actions: A complete ledgegrab DOES
+	//      - Marks m_Climbing as true
+	//      - Disables collisions
+	//      - Snaps you to the ledge object
+	//      - Kills your velocity and turns off gravity
+	//      - Checks to make sure you are facing the right direction
+	//      - Plays ledge climb animation
+	//      - After animation, teleports cat to above the ledge
+	//      - Re-enables collisions and gravity
+	//      - Marks m_Climbing as false
+	public void GrabLedge(bool isRight, Transform ledge) {
+		
+		// If we are not grounded and not already climbing
+		if (!m_Grounded && !m_Climbing) {
+			m_Climbing = true;
+			m_Grounded = true;
+			m_animator.SetBool("grounded", true);
+			m_Collider.enabled = false;
+			if (isRight == m_FacingRight) {Flip();} // If we're facing away from the ledge then flip
+			m_Rigidbody2D.gravityScale = 0f;
+			m_Rigidbody2D.velocity = Vector3.zero;
+			transform.position = ledge.position;
+			StartCoroutine(waitForClimbAnim(ledge));
+		}
+	}
+
+	public IEnumerator waitForClimbAnim(Transform ledge) {
+		m_animator.Play("cat_ledge_getup");
+		yield return new WaitForSeconds(grabLockLength);
+		transform.position = ledge.position + new Vector3(0f, grabTeleportHeight, 0f);
+		m_Collider.enabled = true;
+		m_Rigidbody2D.gravityScale = defaultGravity;
+		m_Climbing = false;
 	}
 }
