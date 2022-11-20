@@ -16,9 +16,12 @@ public class FullSkeletonController : MonoBehaviour, SkeletonController
     [SerializeField] private Rigidbody2D rb;
     [SerializeField] LayerMask grabbable;
     [SerializeField] LayerMask grabbableSolid;
+    [SerializeField] Collider2D catCollider;
     
     private bool isActive = false;
     private float horizontal = 0f;
+    private float vertical = 0f;
+    private bool isRagdoll;
 
     // Start is called before the first frame update
     void Start()
@@ -29,6 +32,8 @@ public class FullSkeletonController : MonoBehaviour, SkeletonController
             for (int j = i + 1; j < colliders.Length; j++) {
                 Physics2D.IgnoreCollision(colliders[i], colliders[j]);
             }
+            Physics2D.IgnoreCollision(colliders[i], catCollider);
+            Physics2D.IgnoreCollision(catCollider, colliders[i]);
         }
     }
 
@@ -38,9 +43,12 @@ public class FullSkeletonController : MonoBehaviour, SkeletonController
         // Get inputs only if this is the active player
         if(isActive) {
             horizontal = Input.GetAxisRaw("Horizontal");
+            vertical = Input.GetAxisRaw("Vertical");
         }
 
-        if (horizontal != 0f) {
+        isRagdoll = vertical == -1f;
+
+        if (!isRagdoll && horizontal != 0f) {
             if (horizontal > 0f) {
                 animator.Play("fullskeleton_walkRight");
                 rb.AddForce(Vector2.right * playerSpeed * Time.fixedDeltaTime);
@@ -68,5 +76,9 @@ public class FullSkeletonController : MonoBehaviour, SkeletonController
 
     public LayerMask getGrabbableSolid() {
         return grabbableSolid;
+    }
+
+    public bool getRagdoll() {
+        return isRagdoll;
     }
 }

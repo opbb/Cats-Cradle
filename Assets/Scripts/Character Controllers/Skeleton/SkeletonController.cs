@@ -10,6 +10,8 @@ using UnityEngine;
 
         bool getIsActive();
 
+        bool getRagdoll();
+
         LayerMask getGrabbable();
 
         LayerMask getGrabbableSolid();

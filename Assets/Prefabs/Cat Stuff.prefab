@@ -451,10 +451,10 @@ MonoBehaviour:
   m_MovementSmoothing: 0.08
   m_WhatIsGround:
     serializedVersion: 2
-    m_Bits: 448
+    m_Bits: 6464
   swattable:
     serializedVersion: 2
-    m_Bits: 384
+    m_Bits: 6400
   m_GroundCheckLeft: {fileID: 4170436788085786312}
   m_GroundCheckRight: {fileID: 4170436789387965113}
   m_animator: {fileID: 4170436787997476021}

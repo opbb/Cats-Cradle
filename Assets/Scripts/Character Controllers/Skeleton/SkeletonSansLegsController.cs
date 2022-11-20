@@ -8,11 +8,11 @@ public class SkeletonSansLegsController : MonoBehaviour, SkeletonController
     [SerializeField] private Rigidbody2D torso;
     [SerializeField] private float verticalForce;
     [SerializeField] private float horizontalForce;
-    [SerializeField] private float floatDistance;
     [SerializeField] LayerMask grabbable;
     [SerializeField] LayerMask grabbableSolid;
     [SerializeField] SkeletonGrab leftHand;
     [SerializeField] SkeletonGrab rightHand;
+    [SerializeField] Collider2D catCollider;
     private bool isActive = false;
     private float horizontal = 0f;
     private float vertical = 0f;
@@ -26,6 +26,8 @@ public class SkeletonSansLegsController : MonoBehaviour, SkeletonController
             for (int j = i + 1; j < colliders.Length; j++) {
                 Physics2D.IgnoreCollision(colliders[i], colliders[j]);
             }
+            Physics2D.IgnoreCollision(colliders[i], catCollider);
+            Physics2D.IgnoreCollision(catCollider, colliders[i]);
         }
     }
 
@@ -62,5 +64,9 @@ public class SkeletonSansLegsController : MonoBehaviour, SkeletonController
 
     public LayerMask getGrabbableSolid() {
         return grabbableSolid;
+    }
+
+    public bool getRagdoll() {
+        return false;
     }
 }

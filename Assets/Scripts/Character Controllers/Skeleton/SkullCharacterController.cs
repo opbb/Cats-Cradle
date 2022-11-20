@@ -64,4 +64,8 @@ public class SkullCharacterController : MonoBehaviour, SkeletonController {
     public LayerMask getGrabbableSolid() {
         return -1;
     }
+
+    public bool getRagdoll() {
+        return false;
+    }
 }
