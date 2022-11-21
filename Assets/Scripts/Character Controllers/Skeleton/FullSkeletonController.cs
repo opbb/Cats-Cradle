@@ -32,8 +32,10 @@ public class FullSkeletonController : MonoBehaviour, SkeletonController
             for (int j = i + 1; j < colliders.Length; j++) {
                 Physics2D.IgnoreCollision(colliders[i], colliders[j]);
             }
-            Physics2D.IgnoreCollision(colliders[i], catCollider);
-            Physics2D.IgnoreCollision(catCollider, colliders[i]);
+            if (!(colliders[i].tag == "CatGrabTrigger")) {
+                Physics2D.IgnoreCollision(colliders[i], catCollider);
+                Physics2D.IgnoreCollision(catCollider, colliders[i]);
+            }
         }
     }
 

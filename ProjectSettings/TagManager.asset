@@ -6,6 +6,7 @@ TagManager:
   tags:
   - LeftLedge
   - RightLedge
+  - CatGrabTrigger
   layers:
   - Default
   - TransparentFX

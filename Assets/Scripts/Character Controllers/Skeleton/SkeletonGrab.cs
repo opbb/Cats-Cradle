@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System;
 using UnityEngine;
+using static GlobalUtils;
 
 public class SkeletonGrab : MonoBehaviour
 {
@@ -46,7 +47,7 @@ public class SkeletonGrab : MonoBehaviour
                 isGrabbingSolid = true;
             } else {
                 int grabbedLayer = holdJoint.connectedBody.gameObject.layer;
-                isGrabbingSolid = isLayerInMask(grabbedLayer, grabbableSolid);
+                isGrabbingSolid = GlobalUtils.isLayerInMask(grabbedLayer, grabbableSolid);
             }
         } else {
             isGrabbingSolid = false;
@@ -63,7 +64,7 @@ public class SkeletonGrab : MonoBehaviour
     private void OnTriggerEnter2D(Collider2D col)
     {
         int layer = col.gameObject.layer; // The layer this collision is with.
-        if (hold && isLayerInMask(layer, grabbable) /* checks if the layer is in the layermask somehow, idk */) {
+        if (hold && GlobalUtils.isLayerInMask(layer, grabbable) /* checks if the layer is in the layermask somehow, idk */) {
             Rigidbody2D rb = col.transform.GetComponent<Rigidbody2D>();
             if (rb == null) {
                 FixedJoint2D fj = transform.gameObject.AddComponent(typeof(FixedJoint2D)) as FixedJoint2D;
@@ -74,9 +75,6 @@ public class SkeletonGrab : MonoBehaviour
         }
     }
 
-    private bool isLayerInMask(int layer, LayerMask layerMask) {
-        return layerMask == (layerMask | (1 << layer));
-    }
 
     public bool Grabbing() {
         return isGrabbing;

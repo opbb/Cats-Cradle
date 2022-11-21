@@ -1259,10 +1259,10 @@ MonoBehaviour:
   horizontalForce: 600
   grabbable:
     serializedVersion: 2
-    m_Bits: 320
+    m_Bits: 4416
   grabbableSolid:
     serializedVersion: 2
-    m_Bits: 64
+    m_Bits: 4160
   leftHand: {fileID: 135885528}
   rightHand: {fileID: 581980178}
   catCollider: {fileID: 2099042008}

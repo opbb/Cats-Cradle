@@ -13,6 +13,7 @@ public class CatCharacterController : MonoBehaviour
 	[SerializeField] private Transform m_GroundCheckRight;                       // A position marking where to check if the player is grounded.
 	[SerializeField] private Animator m_animator; 								// The animator for this character
 	[SerializeField] private GameObject guidePrefab; 
+	[SerializeField] private SkullCatGrab skullCatGrab;							// The script that manages the skull sprite while the cat is grabbing the skeleton 
 	[SerializeField] private int numJumpGuides;
 	[SerializeField] private float guidesTimeOffset;
 	[SerializeField] private float jumpVelocityTransfer; 						// The amount of prior velocity that remains when jumping.
@@ -21,7 +22,8 @@ public class CatCharacterController : MonoBehaviour
 	[SerializeField] private float swatDist; 
 	[SerializeField] private float grabVelDeadzone; 
 	[SerializeField] private float grabTeleportHeight; 
-	[SerializeField] private float grabLockLength; 
+	[SerializeField] private float grabLockLength;
+	
 
 	private GameObject[] jumpGuides;
 	const float k_GroundedRadius = .2f; // Radius of the overlap circle to determine if grounded
@@ -31,7 +33,10 @@ public class CatCharacterController : MonoBehaviour
 	private Vector3 m_Velocity = Vector3.zero;
 	private bool m_Climbing; 			// Whether or not the player is climbing.
 	private Collider2D m_Collider; 		// The cat's collider
+	private Collider2D m_LedgeCheck;
 	private float defaultGravity; 		// The cat's deafault gravity value
+	private bool m_isGrabSkeleton = false;		// Whether the cat is currently on the skeleton.
+	private bool m_canGrabSkeleton = true;		// Whether or not the cat is currently able to grab the skeleton.
 
 	[Header("Events")]
 	[Space]
@@ -46,6 +51,7 @@ public class CatCharacterController : MonoBehaviour
 	{
 		m_Rigidbody2D = GetComponent<Rigidbody2D>();
 		m_Collider = (Collider2D)GetComponent<CapsuleCollider2D>();
+		m_LedgeCheck = (Collider2D)GetComponentInChildren<BoxCollider2D>();
 		m_Climbing = false;
 		defaultGravity = m_Rigidbody2D.gravityScale;
 
@@ -65,7 +71,7 @@ public class CatCharacterController : MonoBehaviour
 
 	private void FixedUpdate()
 	{
-		if (!m_Climbing) {
+		if (!m_Climbing && !m_isGrabSkeleton) {
 			bool wasGrounded = m_Grounded;
 			m_Grounded = false;
 
@@ -84,6 +90,8 @@ public class CatCharacterController : MonoBehaviour
 
 			m_animator.SetFloat("vertSpeed", m_Rigidbody2D.velocity.y);
 			m_animator.SetBool("grounded", m_Grounded);
+		} else if (m_isGrabSkeleton) {
+			transform.position = skullCatGrab.transform.position;
 		}
 	}
 
@@ -92,7 +100,7 @@ public class CatCharacterController : MonoBehaviour
 	{
 
 		//only control the player if grounded
-		if (m_Grounded && !m_Climbing)
+		if (m_Grounded && !m_Climbing && !m_isGrabSkeleton)
 		{
 			// Move the character by finding the target velocity
 			Vector3 targetVelocity = new Vector2(move * 10f, m_Rigidbody2D.velocity.y);
@@ -155,6 +163,11 @@ public class CatCharacterController : MonoBehaviour
 		return m_Climbing;
 	}
 
+	// Get m_isGrabSkeleton variable
+	public bool isGrabSkeleton() {
+		return m_isGrabSkeleton;
+	}
+
 
 	private Vector3 calculateJump(Vector2 jumpDirection, float jumpForce) {
 		jumpDirection = jumpDirection.normalized;
@@ -164,6 +177,9 @@ public class CatCharacterController : MonoBehaviour
 	}
 
 	public void Jump(Vector2 jumpDirection, float jumpForce) {
+		if (m_isGrabSkeleton) {
+			ungrabSkeleton();
+		}
 		m_Rigidbody2D.velocity = calculateJump(jumpDirection, jumpForce);
 		OnJumpEvent.Invoke();
 	}
@@ -172,13 +188,13 @@ public class CatCharacterController : MonoBehaviour
 		Vector3 initialVelPred = calculateJump(jumpDirection, jumpForce);
 
 		for (int i = 0; i < jumpGuides.Length; i++) {
-			jumpGuides[i].transform.position = PointPos(initialVelPred, (i + 1) * guidesTimeOffset);
+			jumpGuides[i].transform.position = pointPos(initialVelPred, (i + 1) * guidesTimeOffset);
 			((SpriteRenderer)(jumpGuides[i].GetComponent(typeof(SpriteRenderer)))).color = Color.white; // Set spirite renderer to show
 		}
 	}
 
-	private Vector2 PointPos(Vector3 initialVelocity, float time) {
-		return transform.position + initialVelocity * time + (Vector3)(Physics2D.gravity) * (time * time * 0.5f) * m_Rigidbody2D.gravityScale;
+	private Vector2 pointPos(Vector3 initialVelocity, float time) {
+		return transform.position + initialVelocity * time + (Vector3)(Physics2D.gravity) * (time * time * 0.5f) * defaultGravity;
 	}
 
 	public void HideJumpGuides() {
@@ -211,10 +227,8 @@ public class CatCharacterController : MonoBehaviour
 			m_Climbing = true;
 			m_Grounded = true;
 			m_animator.SetBool("grounded", true);
-			m_Collider.enabled = false;
 			if (isRight == m_FacingRight) {Flip();} // If we're facing away from the ledge then flip
-			m_Rigidbody2D.gravityScale = 0f;
-			m_Rigidbody2D.velocity = Vector3.zero;
+			disableCatInteractions();
 			transform.position = ledge.position;
 			StartCoroutine(waitForClimbAnim(ledge));
 		}
@@ -224,8 +238,46 @@ public class CatCharacterController : MonoBehaviour
 		m_animator.Play("cat_ledge_getup");
 		yield return new WaitForSeconds(grabLockLength);
 		transform.position = ledge.position + new Vector3(0f, grabTeleportHeight, 0f);
-		m_Collider.enabled = true;
-		m_Rigidbody2D.gravityScale = defaultGravity;
+		enableCatInteractions();
 		m_Climbing = false;
+	}
+
+	private void grabSkeleton() 
+	{
+		// Grab the skeleton if is grounded and not currently grabbing the skeleton and if can grab skeleton
+		if (!m_Grounded && !m_isGrabSkeleton && m_canGrabSkeleton) {
+			m_isGrabSkeleton = true; // is now grabbing the skeleton
+			m_canGrabSkeleton = false; // Cant grab again until later
+			m_Grounded = true;
+
+			// To enter the "grabbing skeleton state" we will turn off collisions, gravity, sprite renderer(cat is in skeleton sprite)
+			disableCatInteractions();
+			this.SendMessage("clearInputs"); // Tell CatCharacterMovement to clear its input values
+		}
+	}
+
+	private void ungrabSkeleton() {
+		m_isGrabSkeleton = false; // is not grabbing the skeleton
+		enableCatInteractions();
+		m_Grounded = false;
+	}
+
+	private void disableCatInteractions() {
+		m_Collider.enabled = false;
+		m_LedgeCheck.enabled = false;
+		m_Rigidbody2D.gravityScale = 0f;
+		m_Rigidbody2D.velocity = Vector3.zero;
+	}
+
+	private void enableCatInteractions() {
+		m_Collider.enabled = true;
+		m_LedgeCheck.enabled = true;
+		m_Rigidbody2D.gravityScale = defaultGravity;
+	}
+
+	private void resetCanGrabSkeleton() {
+		if (!m_isGrabSkeleton) {
+			m_canGrabSkeleton = true;
+		}
 	}
 }

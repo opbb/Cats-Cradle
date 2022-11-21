@@ -80,7 +80,7 @@ GameObject:
   - component: {fileID: 482577216598585671}
   - component: {fileID: 2780505640664439005}
   - component: {fileID: 678079454296486468}
-  m_Layer: 3
+  m_Layer: 0
   m_Name: ledgeCheckRight
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -713,7 +713,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 4170436788085786312}
-  m_Layer: 3
+  m_Layer: 0
   m_Name: groundCheckLeft
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -1135,7 +1135,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 4170436789387965113}
-  m_Layer: 3
+  m_Layer: 0
   m_Name: groundCheckRight
   m_TagString: Untagged
   m_Icon: {fileID: 0}

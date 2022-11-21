@@ -43,17 +43,19 @@ public class CatCharacterMovement : MonoBehaviour
             //--------------------------------------------------------------------------------------------
 
             // These 2 variables get the player input horizontally and vertically.
+            if (!controller.isGrabSkeleton()) {
             horizontal = Input.GetAxisRaw("Horizontal");
             vertical = Input.GetAxisRaw("Vertical");
 
             // These 2 variables get the player's clicks
-            leftMouse = Input.GetButton("Fire1");
+            shiftDown = Input.GetButtonDown("Fire3");
 
             rightMouse = Input.GetButton("Fire2");
 
             //These variables get the player's other inputs
+            }
             
-            shiftDown = Input.GetButtonDown("Fire3");
+            leftMouse = Input.GetButton("Fire1");
         }
     }
 
@@ -146,6 +148,10 @@ public class CatCharacterMovement : MonoBehaviour
 
     public void switchActive() {
         isActive = !isActive;
+        clearInputs();
+    }
+
+    private void clearInputs() {
         horizontal = 0f;
         vertical = 0f;
         leftMouse = false;
