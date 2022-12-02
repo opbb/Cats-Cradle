@@ -23,6 +23,7 @@ public class CatCharacterController : MonoBehaviour
 	[SerializeField] private float grabVelDeadzone; 
 	[SerializeField] private float grabTeleportHeight; 
 	[SerializeField] private float grabLockLength;
+	[SerializeField] private SkullCatGrab skullGrabSpriteController;
 	
 
 	private GameObject[] jumpGuides;
@@ -250,8 +251,9 @@ public class CatCharacterController : MonoBehaviour
 			m_canGrabSkeleton = false; // Cant grab again until later
 			m_Grounded = true;
 
-			// To enter the "grabbing skeleton state" we will turn off collisions, gravity, sprite renderer(cat is in skeleton sprite)
+			// To enter the "grabbing skeleton state" we will turn off collisions, gravity
 			disableCatInteractions();
+			skullGrabSpriteController.CatOnSkull(); // Animates cat on skull
 			this.SendMessage("clearInputs"); // Tell CatCharacterMovement to clear its input values
 		}
 	}
@@ -260,6 +262,7 @@ public class CatCharacterController : MonoBehaviour
 		m_isGrabSkeleton = false; // is not grabbing the skeleton
 		enableCatInteractions();
 		m_Grounded = false;
+		skullGrabSpriteController.CatOffSkull(); // Animates cat off skull
 	}
 
 	private void disableCatInteractions() {

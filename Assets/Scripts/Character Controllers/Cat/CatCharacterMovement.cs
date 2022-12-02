@@ -6,6 +6,9 @@ public class CatCharacterMovement : MonoBehaviour
 {
     [SerializeField] private CatCharacterController controller;
     [SerializeField] private DialogueManager dialogueManager;
+    [SerializeField] private SpriteRenderer noCollar;
+    [SerializeField] private SpriteRenderer collar;
+    public bool hasCollar;
     [SerializeField] private Animator animator;
     [SerializeField] private new Camera camera;
 
@@ -32,7 +35,7 @@ public class CatCharacterMovement : MonoBehaviour
     // Start is called before the first frame update.
     void Start()
     {
-        
+        setHasCollar(hasCollar);
     }
 
     // Update is called once per frame.
@@ -95,6 +98,7 @@ public class CatCharacterMovement : MonoBehaviour
 
             controller.FaceDirection(mouseDirection);
 
+            setHasCollar(!hasCollar);
             animator.Play("cat_swat");
             swatEmitter.Play();
 
@@ -164,5 +168,11 @@ public class CatCharacterMovement : MonoBehaviour
     void LateUpdate()
     {
         
+    }
+
+    public void setHasCollar(bool hasCollar) {
+        this.hasCollar = hasCollar;
+        collar.enabled = hasCollar;
+        noCollar.enabled = !hasCollar;
     }
 }

@@ -6,19 +6,26 @@ public class SkullCatGrab : MonoBehaviour
 {
 
     [SerializeField] SpriteRenderer skullRenderer;
+    [SerializeField] GameObject catNoCollar;
+    [SerializeField] GameObject catCollar;
+    [SerializeField] CatCharacterMovement cat;
     [SerializeField] Sprite skull;
     [SerializeField] Sprite skullCat;
     [SerializeField] Sprite skullCatCollar;
-    
-    // Start is called before the first frame update
-    void Start()
-    {
-        
+
+    public void CatOnSkull() {
+        catNoCollar.SetActive(false);
+        catCollar.SetActive(false);
+        if(cat.hasCollar) {
+            skullRenderer.sprite = skullCatCollar;
+        } else {
+            skullRenderer.sprite = skullCat;
+        }
     }
 
-    // Update is called once per frame
-    void Update()
-    {
-        
+    public void CatOffSkull() {
+        skullRenderer.sprite = skull;
+        catNoCollar.SetActive(true);
+        catCollar.SetActive(true);
     }
 }
