@@ -4,23 +4,27 @@ using UnityEngine;
 
 public class CatCharacterMovement : MonoBehaviour
 {
+    [Header("Components")]
     [SerializeField] private CatCharacterController controller;
     [SerializeField] private DialogueManager dialogueManager;
     [SerializeField] private SpriteRenderer noCollar;
     [SerializeField] private SpriteRenderer collar;
-    public bool hasCollar;
     [SerializeField] private Animator animator;
     [SerializeField] private new Camera camera;
 
     // Sound Emitters
+    [Header("Sounds")]
     [SerializeField] FMODUnity.StudioEventEmitter footstepsEmitter;
     [SerializeField] FMODUnity.StudioEventEmitter swatEmitter;
 
-    //Tuning Variables
+    [Header("Jump Tuning")]
     [SerializeField] private float speed = 0f;
     [SerializeField] private float maxJumpDist;
     [SerializeField] private float jumpDelay;
+
+    [Header("Other")]
     [SerializeField] private int swatCooldown = 0;
+    public bool hasCollar;
 
     [HideInInspector] public bool isActive = true;
     private float horizontal = 0f;

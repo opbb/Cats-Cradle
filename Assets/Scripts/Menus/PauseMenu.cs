@@ -5,14 +5,12 @@ using UnityEngine;
 public class PauseMenu : MonoBehaviour
 {
 
+    [SerializeField] private MusicManager musicManager;
+
     public static bool isPaused = false;
     [SerializeField] private GameObject pauseMenuUI;
 
-    // Start is called before the first frame update
-    void Start()
-    {
-        
-    }
+    [SerializeField] private FMODUnity.StudioEventEmitter pauseSoundEmitter;
 
     // Update is called once per frame
     void Update()
@@ -31,11 +29,19 @@ public class PauseMenu : MonoBehaviour
         pauseMenuUI.SetActive(false);
         Time.timeScale = 1f;
         isPaused = false;
+        musicManager.SwitchToLevelMusic();
+        pauseSoundEmitter.Play();
     }
 
     void Pause() {
         pauseMenuUI.SetActive(true);
         Time.timeScale = 0f;
         isPaused = true;
+        musicManager.SwitchToPauseMusic();
+        pauseSoundEmitter.Play();
+    }
+
+    public void OnDisable() {
+        Time.timeScale = 1f;
     }
 }

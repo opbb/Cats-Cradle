@@ -89,11 +89,14 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 730b51f5496b8094ca97c93b26bf8e1f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  camera: {fileID: 0}
   catTransform: {fileID: 0}
   skeletonTransform: {fileID: 0}
-  listener: {fileID: 0}
   cameraDistance: -10
   verticalOffset: 3
+  maxCamDistance: 3
+  camMoveWithMouseFactor: 100
+  camSmoothTime: 0.05
 --- !u!114 &4588080258205830081
 MonoBehaviour:
   m_ObjectHideFlags: 0

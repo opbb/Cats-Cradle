@@ -17,13 +17,15 @@ public class CatCharacterController : MonoBehaviour
 	[SerializeField] private int numJumpGuides;
 	[SerializeField] private float guidesTimeOffset;
 	[SerializeField] private float jumpVelocityTransfer; 						// The amount of prior velocity that remains when jumping.
+	[SerializeField] FMODUnity.StudioEventEmitter ledgeGetupEmitter;
+	[Header("Swat Tuning")]
 	[SerializeField] private float swatSize; 
 	[SerializeField] private float swatForce; 
 	[SerializeField] private float swatDist; 
+	[Header("Skeleton Grab Tuning")]
 	[SerializeField] private float grabVelDeadzone; 
 	[SerializeField] private float grabTeleportHeight; 
 	[SerializeField] private float grabLockLength;
-	[SerializeField] private SkullCatGrab skullGrabSpriteController;
 	
 
 	private GameObject[] jumpGuides;
@@ -227,6 +229,7 @@ public class CatCharacterController : MonoBehaviour
 		if (!m_Grounded && !m_Climbing) {
 			m_Climbing = true;
 			m_Grounded = true;
+			ledgeGetupEmitter.Play();
 			m_animator.SetBool("grounded", true);
 			if (isRight == m_FacingRight) {Flip();} // If we're facing away from the ledge then flip
 			disableCatInteractions();
@@ -253,7 +256,7 @@ public class CatCharacterController : MonoBehaviour
 
 			// To enter the "grabbing skeleton state" we will turn off collisions, gravity
 			disableCatInteractions();
-			skullGrabSpriteController.CatOnSkull(); // Animates cat on skull
+			skullCatGrab.CatOnSkull(); // Animates cat on skull
 			this.SendMessage("clearInputs"); // Tell CatCharacterMovement to clear its input values
 		}
 	}
@@ -262,7 +265,7 @@ public class CatCharacterController : MonoBehaviour
 		m_isGrabSkeleton = false; // is not grabbing the skeleton
 		enableCatInteractions();
 		m_Grounded = false;
-		skullGrabSpriteController.CatOffSkull(); // Animates cat off skull
+		skullCatGrab.CatOffSkull(); // Animates cat off skull
 	}
 
 	private void disableCatInteractions() {

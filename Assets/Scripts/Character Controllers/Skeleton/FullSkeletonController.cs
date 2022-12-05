@@ -49,7 +49,9 @@ public class FullSkeletonController : MonoBehaviour, SkeletonController
         }
 
         isRagdoll = vertical == -1f;
+    }
 
+    void FixedUpdate() {
         if (!isRagdoll && horizontal != 0f) {
             if (horizontal > 0f) {
                 animator.Play("fullskeleton_walkRight");

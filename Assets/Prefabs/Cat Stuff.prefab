@@ -32,9 +32,72 @@ Transform:
   - {fileID: 4170436789208163032}
   - {fileID: 4170436789363163117}
   - {fileID: 4170436788459777842}
+  - {fileID: 1523570474141829761}
   m_Father: {fileID: 4170436787701147967}
   m_RootOrder: 1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1 &774017651212392460
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1523570474141829761}
+  - component: {fileID: 8824535410123639783}
+  m_Layer: 3
+  m_Name: HoistSound
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &1523570474141829761
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 774017651212392460}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 7506879277624714122}
+  m_RootOrder: 4
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &8824535410123639783
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 774017651212392460}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9a6610d2e704f1648819acc8d7460285, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  CollisionTag: 
+  EventReference:
+    Guid:
+      Data1: 1572309383
+      Data2: 1312012657
+      Data3: 967634580
+      Data4: 1239465427
+    Path: event:/Character/Cat/Cat_GetUp
+  Event: 
+  PlayEvent: 0
+  StopEvent: 0
+  AllowFadeout: 1
+  TriggerOnce: 0
+  Preload: 1
+  Params: []
+  OverrideAttenuation: 0
+  OverrideMinDistance: 1
+  OverrideMaxDistance: 20
 --- !u!1 &1940870103941922786
 GameObject:
   m_ObjectHideFlags: 0
@@ -463,6 +526,7 @@ MonoBehaviour:
   numJumpGuides: 20
   guidesTimeOffset: 0.07
   jumpVelocityTransfer: 0.2
+  ledgeGetupEmitter: {fileID: 8824535410123639783}
   swatSize: 3
   swatForce: 8000
   swatDist: 1.2
@@ -515,7 +579,6 @@ MonoBehaviour:
   dialogueManager: {fileID: 0}
   noCollar: {fileID: 674046027787599772}
   collar: {fileID: 1943517290956003989}
-  hasCollar: 0
   animator: {fileID: 4170436787997476021}
   camera: {fileID: 0}
   footstepsEmitter: {fileID: 4170436787892595275}
@@ -524,6 +587,7 @@ MonoBehaviour:
   maxJumpDist: 40
   jumpDelay: 0.12
   swatCooldown: 28
+  hasCollar: 0
   isActive: 1
 --- !u!70 &4170436787701147940
 CapsuleCollider2D:
